@@ -1,4 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DeskClock</string>
+    <string name="app_name">Desk Clock</string>
+    <string name="menu_title_prefs">Preferences</string>
+    <string name="menu_title_quit">Quit</string>
+    <string name="pref_title">Preferences</string>
+    <string name="pref_summary">Big Digital Clock Preferences</string>
+    <string name="pref_title_keep_screen_on">Keep Screen On</string>
+    <string name="pref_summary_keep_screen_on">Prevent display from sleeping</string>
+    <string name="pref_dialog_title_keep_screen_on">Keep Screen On</string>
+    <string name="pref_default_keep_screen_on">0</string>
+    <string name="pref_title_military_time">12/24 Hour Time</string>
+    <string name="pref_summary_military_time">AM/PM or military time</string>
+    <string name="pref_dialog_title_military_time">12/24 Hour Time</string>
+    <string name="pref_default_military_time">0</string>
+    <string name="pref_title_show_seconds">Show Seconds</string>
+    <string name="pref_title_blink_seconds">Blink seconds</string>
+    <string name="pref_summary_blink_seconds">Blink the colon each second. Warning: looks good on monospaced fonts only</string>
+    <string name="pref_title_color">Clock Color</string>
+    <string name="pref_summary_color">Color of clock digits</string>
+    <string name="pref_title_background_color">Background Color</string>
+    <string name="pref_title_font">Font</string>
+    <string name="pref_summary_font">Clock Face Font</string>
+    <string name="pref_dialog_title_font">Choose Font</string>
+    <string name="pref_default_font">0</string>
+    <string name="settings_bg_color_confirm">Confirm</string>
+    <string name="settings_default_color_confirm">Default Color</string>
+    <string name="settings_bg_color_dialog">Pick a color</string>
+    <string-array name="pref_options_keep_screen_on">
+        <item>Off</item>
+        <item>On - dim</item>
+        <item>On - bright</item>
+    </string-array>
+    <string-array name="pref_values_keep_screen_on">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="pref_options_font">
+    	<item>System Default</item>
+    	<item>System San Serif</item>
+    	<item>System Serif</item>
+    	<item>System Monospace</item>
+    	<item>Abduction 2000</item>
+    	<item>DS Point</item>
+    	<item>DS Terminal</item>
+    	<item>DT 104</item>
+    	<item>Delusion</item>
+    	<item>Digital Readout</item>
+    	<item>Digital Readout - Itialics</item>
+    	<item>Digital2</item>
+    	<item>Digital Dream</item>
+    	<item>Display Dots</item>
+    	<item>Digi</item>
+    </string-array>
+    <string-array name="pref_values_font">
+    	<item>0</item>	
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>11</item>
+		<item>12</item>
+		<item>13</item>
+		<item>14</item>
+	</string-array>
+    
 </resources>

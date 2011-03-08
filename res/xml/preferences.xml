@@ -1,0 +1,45 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="@string/pref_title"
+	android:key="preferences"
+	android:summary="@string/pref_summary"
+    >
+    
+    <ListPreference
+      android:key="pref_keep_screen_on"
+      android:title="@string/pref_title_keep_screen_on"
+      android:summary="@string/pref_summary_keep_screen_on"
+      android:dialogTitle="@string/pref_dialog_title_keep_screen_on"
+      android:defaultValue="" android:entryValues="@array/pref_values_keep_screen_on" android:entries="@array/pref_options_keep_screen_on"/>
+      
+    <CheckBoxPreference
+      android:key="pref_military_time"
+      android:title="@string/pref_title_military_time" 
+      android:summary="@string/pref_summary_military_time" />
+      
+    <CheckBoxPreference
+      android:key="pref_show_seconds"
+      android:title="@string/pref_title_show_seconds" />
+      
+    <CheckBoxPreference
+      android:key="pref_blink_seconds"
+      android:title="@string/pref_title_blink_seconds" 
+      android:summary="@string/pref_summary_blink_seconds" />
+      
+    <PreferenceScreen
+      android:key="pref_color"
+      android:title="@string/pref_title_color" />
+      
+    <PreferenceScreen
+      android:key="pref_background_color" 
+      android:title="@string/pref_title_background_color"/>
+      
+    <ListPreference
+      android:key="pref_font"
+      android:title="@string/pref_title_font"
+      android:summary="@string/pref_summary_font"
+      android:dialogTitle="@string/pref_dialog_title_font"
+      android:defaultValue="" android:entryValues="@array/pref_values_font" android:entries="@array/pref_options_font"/>
+      
+    
+        
+</PreferenceScreen>
