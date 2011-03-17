@@ -189,10 +189,14 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		prefsKeepSreenOn = Integer.valueOf(prefs 
+		try {
+			prefsKeepSreenOn = Integer.valueOf(prefs 
 				.getString(
 						"pref_keep_screen_on",
 						"0"));
+		} catch (NumberFormatException e) {
+			prefsKeepSreenOn = 0;
+		}
 		setScreenLock(prefsKeepSreenOn);
 
 		prefsMilitaryTime = prefs
@@ -200,12 +204,20 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 						"pref_military_time",
 						false);
 
-		prefsFontColor = prefs.getInt("pref_color",
+		try {
+			prefsFontColor = prefs.getInt("pref_color",
 				Color.WHITE);
+		} catch (NumberFormatException e) {
+			prefsFontColor = Color.WHITE;
+		}
 		display.setTextColor(prefsFontColor);
 
-		prefsBackgroundColor = prefs.getInt(
+		try {
+			prefsBackgroundColor = prefs.getInt(
 				"pref_background_color", Color.BLACK);
+		} catch (NumberFormatException e) {
+			prefsBackgroundColor = Color.BLACK;
+		}
 		layout.setBackgroundColor(prefsBackgroundColor);
 
 		boolean showSeconds = prefs.getBoolean( "pref_show_seconds", false);
