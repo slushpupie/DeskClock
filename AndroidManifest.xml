@@ -16,4 +16,5 @@
 	</activity>
     </application>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-sdk android:targetSdkVersion="8" android:minSdkVersion="4"></uses-sdk>
 </manifest> 
