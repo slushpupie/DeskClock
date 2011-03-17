@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Desk Clock</string>
     <string name="menu_title_prefs">Preferences</string>
-    <string name="menu_title_quit">Quit</string>
     <string name="pref_title">Preferences</string>
     <string name="pref_summary">Big Digital Clock Preferences</string>
     <string name="pref_title_keep_screen_on">Keep Screen On</string>
