@@ -5,11 +5,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView 
-    android:id="@+id/display"
+    
+    
+<com.slushpupie.deskclock.DisplayView android:id="@+id/display" 
     android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
-    android:text="88:88:88"
-    />
+    android:layout_height="fill_parent" />
+
 </LinearLayout>
 

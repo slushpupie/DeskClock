@@ -36,9 +36,10 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private PowerManager.WakeLock wl = null;
 	private boolean isRunning = false;
 	private RefreshHandler handler = new RefreshHandler();
-
+	
 	// current state
-	private TextView display;
+	//private TextView display;
+	private DisplayView display;
 	private LinearLayout layout;
 	private int displayWidth = -1;
 	private int displayHeight = -1;;
@@ -66,7 +67,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		layout = (LinearLayout) findViewById(R.id.layout);
-		display = (TextView) findViewById(R.id.display);
+		display = (DisplayView) findViewById(R.id.display);
 
 		fonts = new Typeface[15];
 		fonts[0] = Typeface.DEFAULT_BOLD;
@@ -106,26 +107,6 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	public void onStart() {
 		super.onStart();
 
-		/*
-		Thread localThread = new Thread(new Runnable() {
-			public void run() {
-				try {
-					while (isRunning) {
-						Thread.sleep(500);
-						Message message = Message.obtain(handler);
-						handler.dispatchMessage(message);
-					}
-				} catch (Throwable t) {
-					Log.e(LOG_TAG, "Something bad happened", t);
-				}
-
-			}
-
-		});
-		isRunning = true;
-		localThread.start();
-		*/
-		
 		isRunning = true;
 		updateTime();
 	}
@@ -210,7 +191,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		} catch (NumberFormatException e) {
 			prefsFontColor = Color.WHITE;
 		}
-		display.setTextColor(prefsFontColor);
+		display.setColor(prefsFontColor);
 
 		try {
 			prefsBackgroundColor = prefs.getInt(
@@ -282,34 +263,34 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		displayWidth = metrics.widthPixels;
 		displayHeight = metrics.heightPixels;
 
-		layout.setBackgroundColor(prefsBackgroundColor);
-		display.setTextColor(prefsFontColor);
-		display.setGravity(Gravity.CENTER);
-		display.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-		display.setSingleLine();
+		layout.setBackgroundColor(Color.WHITE);
+		display.setBackgroundColor(prefsBackgroundColor);
+		display.setColor(prefsFontColor);
 
 		Log.d(LOG_TAG,"display configured");
 		needsResizing = true;
 	}
 
 	private void resizeClock() {
-		int leftPadding = 0;
-		/*
-		 * // Is this really needed? if (prefsFont == 0) { Rect digitBounds =
-		 * getBoundingBox("8", fonts[prefsFont]); int width =
-		 * digitBounds.width(); leftPadding = width * -4; }
-		 */
+		
+		 
 
-		display.setTypeface(fonts[prefsFont]);
-		display.setPadding(leftPadding, 0, 0, 0);
-
-		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
-
+		
 		String str = "88:88:";
 		if (prefsShowSeconds)
 			str = "88:88:88:";
 
-		display.setTextSize(1, fitTextToRect(fonts[prefsFont], str, boundingBox));
+		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
+		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
+
+		int leftPadding = 0;
+		Rect digitBounds = getBoundingBox("8", fonts[prefsFont], fontSize ); 
+		int width = digitBounds.width(); 
+		leftPadding = width * -4;
+		
+		display.setFont(fonts[prefsFont]);
+		display.setPadding(leftPadding, 0, 0, 0);
+		display.setSize(fontSize );
 
 		needsResizing = false;
 		updateTime();
@@ -341,7 +322,8 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 		//Log.d(LOG_TAG,"Setting time to "+localTime.format(format));
 		
-		display.setText(localTime.format(format));
+		
+		display.setTime(localTime.format(format));
 		//layout.postInvalidate();
 		if(isRunning)
 			handler.tick();
@@ -350,20 +332,21 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 	private float fitTextToRect(Typeface font, String text, Rect fitRect) {
 
-		int width = fitRect.width(); // v16
-		int height = fitRect.height(); // v6
+		int width = fitRect.width(); 
+		int height = fitRect.height();
 
-		int minGuess = 0; // v11
-		int maxGuess = 640; // v9
-		int guess = 320; // v5
+		int minGuess = 0; 
+		int maxGuess = 640;
+		int guess = 320;
 
 		Rect r;
-		boolean lastGuessTooSmall = true; // v7
+		boolean lastGuessTooSmall = true; 
 
 		for (int i = 0; i < 32; i++) {
 
 			if (minGuess + 1 == maxGuess) {
 				Log.d(LOG_TAG,"Discovered font size "+minGuess);
+				r = getBoundingBox(text, font, guess);
 				return minGuess;
 			}
 
@@ -388,8 +371,8 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	}
 
 	private Rect getBoundingBox(String text, Typeface font, float size) {
-		Rect r = new Rect(0, 0, 0, 0); // v13
-		Paint paint = new Paint(); // v12
+		Rect r = new Rect(0, 0, 0, 0); 
+		Paint paint = new Paint(); 
 		paint.setTypeface(font);
 		paint.setTextSize(size);
 		paint.getTextBounds(text, 0, text.length(), r);
