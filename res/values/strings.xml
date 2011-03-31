@@ -9,7 +9,7 @@
     <string name="pref_dialog_title_keep_screen_on">Keep Screen On</string>
     <string name="pref_default_keep_screen_on">0</string>
     <string name="pref_title_military_time">12/24 Hour Time</string>
-    <string name="pref_summary_military_time">AM/PM or military time</string>
+    <string name="pref_summary_military_time">12 hour or military time</string>
     <string name="pref_dialog_title_military_time">12/24 Hour Time</string>
     <string name="pref_default_military_time">0</string>
     <string name="pref_title_show_seconds">Show Seconds</string>

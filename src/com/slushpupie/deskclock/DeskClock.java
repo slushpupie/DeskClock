@@ -15,6 +15,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -25,6 +26,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class DeskClock extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener
  {
@@ -48,6 +51,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	// backed by preferences
 	private int prefsKeepSreenOn = 0;
 	private boolean prefsMilitaryTime = false;
+	private boolean prefsShowMeridiem = false;
 	private int prefsFontColor = Color.WHITE;
 	private int prefsBackgroundColor = Color.BLACK;
 	private boolean prefsShowSeconds = false;
@@ -185,6 +189,15 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 						"pref_military_time",
 						false);
 
+		boolean showMeridiem = prefs
+				.getBoolean(
+						"pref_meridiem",
+						false);
+		if(showMeridiem != prefsShowMeridiem) {
+			prefsShowMeridiem = showMeridiem;
+			needsResizing = true;
+		}
+		
 		try {
 			prefsFontColor = prefs.getInt("pref_color",
 				Color.WHITE);
@@ -278,7 +291,9 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		
 		String str = "88:88:";
 		if (prefsShowSeconds)
-			str = "88:88:88:";
+			str = str + "88:";
+		if (prefsShowMeridiem)
+			str = str + " AM:";
 
 		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
 		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
@@ -302,28 +317,31 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 			return;
 		}
 
-
-		Time localTime = new Time();
-		long time = System.currentTimeMillis();
-		localTime.set(time);
+		Calendar cal = Calendar.getInstance();
+		DateFormat dateFormat = new DateFormat();
+		
 
 		char colon = ':';
-		if(prefsBlinkColon && localTime.second % 2 == 0) {
+		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0) {
 			colon = ' ';
 		}
 		
-		String format = String.format("%%l%c%%M",colon);
+		
+		String format = String.format("h%cmm",colon);
 
 		if (prefsMilitaryTime)
-			format = String.format("%%H%c%%M",colon);
+			format = String.format("k%cmm",colon);
 
 		if (prefsShowSeconds)
-			format = format + String.format("%c%%S",colon);
+			format = format + String.format("%css",colon);
+		
+		if (prefsShowMeridiem)
+			format = format + " aa";
 
 		//Log.d(LOG_TAG,"Setting time to "+localTime.format(format));
 		
 		
-		display.setTime(localTime.format(format));
+		display.setTime(dateFormat.format(format, cal));
 		//layout.postInvalidate();
 		if(isRunning)
 			handler.tick();
