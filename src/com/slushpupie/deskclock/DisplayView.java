@@ -34,8 +34,8 @@ public class DisplayView extends View {
 	
 	
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setTime(CharSequence time) {
+		this.time = time.toString();
 		requestLayout();
 		invalidate();
 	}
