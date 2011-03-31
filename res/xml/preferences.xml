@@ -17,6 +17,11 @@
       android:summary="@string/pref_summary_military_time" />
       
     <CheckBoxPreference
+      android:key="pref_meridiem"
+      android:title="@string/pref_title_meridiem"
+      android:summary="@string/pref_summary_meridiem" />
+      
+    <CheckBoxPreference
       android:key="pref_show_seconds"
       android:title="@string/pref_title_show_seconds" />
       

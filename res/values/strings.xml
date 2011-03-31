@@ -69,5 +69,7 @@
 		<item>13</item>
 		<item>14</item>
 	</string-array>
+    <string name="pref_title_meridiem">Show AM/PM</string>
+    <string name="pref_summary_meridiem">Display the litteral "AM" or "PM" in the time</string>
     
 </resources>
