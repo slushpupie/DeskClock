@@ -69,5 +69,18 @@
 		<item>13</item>
 		<item>14</item>
 	</string-array>
+	<string name="pref_title_screen_orientation">Screen Orientation</string>
+	<string name="pref_summary_screen_orientation">Allow screen to rotate</string>
+	<string name="pref_dialog_title_screen_orientation">Screen Orientation</string>
+	<string-array name="pref_values_screen_orientation">
+         <item>auto</item>
+         <item>portrait</item>
+         <item>landscape</item>
+     </string-array>
+     <string-array name="pref_options_screen_orientation">
+         <item>Auto-rotate</item>
+         <item>Landscape</item>
+         <item>Portrait</item>
+     </string-array>
     
 </resources>
