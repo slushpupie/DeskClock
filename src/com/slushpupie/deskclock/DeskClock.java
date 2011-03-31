@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -53,6 +54,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private boolean prefsShowSeconds = false;
 	private boolean prefsBlinkColon = false;
 	private int prefsFont = 0;
+	private int prefsScreenOrientation = -1;
 
 	
 
@@ -179,6 +181,17 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 			prefsKeepSreenOn = 0;
 		}
 		setScreenLock(prefsKeepSreenOn);
+		
+		String pso = prefs.getString("pref_screen_orientation", "auto");
+		if("portrait".equals(pso)) {
+			prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+		} else if("landscape".equals(pso)) {
+			prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+		} else {
+			prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+		}
+		setRequestedOrientation(prefsScreenOrientation);
+	
 
 		prefsMilitaryTime = prefs
 				.getBoolean(
