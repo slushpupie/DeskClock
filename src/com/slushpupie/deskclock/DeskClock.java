@@ -25,9 +25,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 public class DeskClock extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener
@@ -261,6 +263,19 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				 if(keepOn == 1) {
 					wl = pm.newWakeLock(
 						PowerManager.SCREEN_DIM_WAKE_LOCK, "DeskClock");
+					
+					Window window = getWindow();
+					LayoutParams layoutParams = window.getAttributes();
+					try {
+						Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
+						buttonBrightness.set(layoutParams, 0);
+					} catch (NoSuchFieldException e) {
+						
+					} catch (IllegalAccessException e) {
+						
+					}
+					window.setAttributes(layoutParams);
+					
 					Log.d(LOG_TAG,"Using DIM wakelock");
 				} else if(keepOn == 2) {
 					wl = pm.newWakeLock(
