@@ -16,6 +16,7 @@ public class DisplayView extends View {
 	
 	private Paint paint;
 	
+	private boolean screenSaver = false;
 	
 	public DisplayView(Context context) {
 		super(context);
@@ -57,6 +58,11 @@ public class DisplayView extends View {
 		invalidate();
 	}
 	
+	public void setScreenSaver(boolean screenSaver) {
+		this.screenSaver = screenSaver;
+		requestLayout();
+		invalidate();
+	}
 	
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -119,20 +125,32 @@ public class DisplayView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if(time == null)
+		if(time == null) 
 			return;
 		
-		Rect boundingBox = new Rect(0, 0, 0, 0);
-		paint.getTextBounds(time, 0, time.length(), boundingBox);
+		Rect boundingBox1 = new Rect(0, 0, 0, 0);
+		paint.getTextBounds("28:88", 0, "28:88".length(), boundingBox1);
+		Rect boundingBox2 = new Rect(0, 0, 0, 0);
+		paint.getTextBounds(time, 0, time.length(), boundingBox2);
 		
-		float horz = (float)(canvas.getWidth() - boundingBox.width()) / 2f;
-		float vert = ((float)canvas.getHeight() / 2f) + ((float)boundingBox.height() / 2f);
+		float horz = ((float)(canvas.getWidth() - boundingBox1.width()));
+		float vert = ((float)(canvas.getHeight() - boundingBox1.height()));
 		
-		canvas.drawText(time, horz/2, vert, paint);
+		
+		float horzDelta = (boundingBox1.width() - boundingBox2.width());
+		 
+		String vChar = time.substring(time.indexOf(":")-1,time.indexOf(":"));
+		String hChar = time.substring(time.length()-1,time.length());
+		float vF = 0.5f;
+		float hF = 0.5f;
+		if(screenSaver) {
+			vF = (float)Integer.valueOf(vChar) * 0.1f;
+			hF = (float)Integer.valueOf(hChar) * 0.1f;
+		}
+		
+		canvas.drawText(time, (horz*hF)+horzDelta, vert*vF+boundingBox2.height(), paint);
 		invalidate();
 		return;
-		
-		
 	}
 	
 	

@@ -61,7 +61,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private boolean prefsBlinkColon = false;
 	private int prefsFont = 0;
 	private int prefsScreenOrientation = -1;
-
+	private boolean prefsScreenSaver = false;
 	
 
 	/** Called when the activity is first created. */
@@ -251,6 +251,13 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 			}
 		}
 
+		boolean ss = prefs.getBoolean("pref_screensaver", false);
+		if(ss != prefsScreenSaver) {
+			prefsScreenSaver = ss;
+			display.setScreenSaver(prefsScreenSaver);
+			needsResizing = true;
+		}
+
 	}
 
 	private void setScreenLock(int keepOn) {
@@ -307,6 +314,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		layout.setBackgroundColor(Color.WHITE);
 		display.setBackgroundColor(prefsBackgroundColor);
 		display.setColor(prefsFontColor);
+		display.setScreenSaver(prefsScreenSaver);
 
 		Log.d(LOG_TAG,"display configured");
 		needsResizing = true;
@@ -317,7 +325,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		 
 
 		
-		String str = "88:88:";
+		String str = "28:88:";
 		if (prefsShowSeconds)
 			str = str + "88:";
 		if (prefsShowMeridiem)
@@ -325,6 +333,9 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
 		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
+		if(prefsScreenSaver) {
+			fontSize = fontSize * 0.8f;
+		}
 
 		int leftPadding = 0;
 		Rect digitBounds = getBoundingBox("8", fonts[prefsFont], fontSize ); 

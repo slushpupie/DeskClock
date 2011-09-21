@@ -83,6 +83,8 @@
          <item>Landscape</item>
      </string-array>
     <string name="pref_title_meridiem">Show AM/PM</string>
-    <string name="pref_summary_meridiem">Display the litteral "AM" or "PM" in the time</string>
+    <string name="pref_summary_meridiem">Display the literal "AM" or "PM" in the time</string>
+    <string name="pref_title_screensaver">Screen Saver</string>
+    <string name="pref_summary_screensaver">Periodically move clock around the screen</string>
     
 </resources>

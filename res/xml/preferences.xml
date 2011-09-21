@@ -35,6 +35,11 @@
       android:title="@string/pref_title_show_seconds" />
       
     <CheckBoxPreference
+      android:key="pref_screensaver"
+      android:title="@string/pref_title_screensaver"
+      android:summary="@string/pref_summary_screensaver" />
+
+    <CheckBoxPreference
       android:key="pref_blink_seconds"
       android:title="@string/pref_title_blink_seconds" 
       android:summary="@string/pref_summary_blink_seconds" />
