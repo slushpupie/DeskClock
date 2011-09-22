@@ -32,10 +32,14 @@ import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
+
+
 public class DeskClock extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener
  {
 
 	private static final String LOG_TAG = "DeskClock";
+	private static char digitcharset[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	private static char lettercharset[] = { 'A', 'P' };
 	
 	private Typeface[] fonts;
 
@@ -321,15 +325,36 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	}
 
 	private void resizeClock() {
-		
-		 
 
+		//determine largest digit
+		char bdigit = digitcharset[0];
+		Rect bb = getBoundingBox(String.valueOf(bdigit), fonts[prefsFont], 10);
+		int w = bb.width();
+		for(int i = 1; i < digitcharset.length; i++) {
+			bb = getBoundingBox(String.valueOf(digitcharset[i]), fonts[prefsFont], 10);
+			if(bb.width() > w) {
+				bdigit = digitcharset[i];
+				w = bb.width();
+			}
+		}
+		//determine largest letter
+		char bletter = lettercharset[0];
+		bb = getBoundingBox(String.valueOf(bletter), fonts[prefsFont], 10);
+		w = bb.width();
+		for(int i = 1; i < lettercharset.length; i++) {
+			bb = getBoundingBox(String.valueOf(lettercharset[i]), fonts[prefsFont], 10);
+			if(bb.width() > w) {
+				bletter = lettercharset[i];
+				w = bb.width();
+			}
+		}
+
+		String str = String.format("%c%c:%c%c", bdigit,bdigit,bdigit,bdigit);
 		
-		String str = "28:88:";
 		if (prefsShowSeconds)
-			str = str + "88:";
+			str = String.format("%s:%c%c", str, bdigit,bdigit);
 		if (prefsShowMeridiem)
-			str = str + " AM:";
+			str = String.format("%s %cM", str, bletter);
 
 		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
 		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
@@ -342,6 +367,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		int width = digitBounds.width(); 
 		leftPadding = width * -4;
 		
+		display.setWideTime(str);
 		display.setFont(fonts[prefsFont]);
 		display.setPadding(leftPadding, 0, 0, 0);
 		display.setSize(fontSize );
@@ -357,8 +383,6 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		}
 
 		Calendar cal = Calendar.getInstance();
-		DateFormat dateFormat = new DateFormat();
-		
 
 		char colon = ':';
 		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0) {
@@ -380,7 +404,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		//Log.d(LOG_TAG,"Setting time to "+localTime.format(format));
 		
 		
-		display.setTime(dateFormat.format(format, cal));
+		display.setTime(DateFormat.format(format, cal));
 		//layout.postInvalidate();
 		if(isRunning)
 			handler.tick();
@@ -444,7 +468,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		}
 		public void tick() {
 			this.removeMessages(0);
-            sendMessageDelayed(obtainMessage(0), 500);
+            sendMessageDelayed(obtainMessage(0), 250);
 		}
 	}
 

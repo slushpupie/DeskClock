@@ -1,5 +1,7 @@
 package com.slushpupie.deskclock;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,12 +14,18 @@ import android.view.View;
 
 public class DisplayView extends View {
 	
-	private String time;
+	private String time = "88:88";
+	private String wideTime = "88:88";
 	
 	private Paint paint;
 	
 	private boolean screenSaver = false;
 	
+	private Random r = new Random();
+
+	private float vF = 0.5f;
+	private float hF = 0.5f;
+
 	public DisplayView(Context context) {
 		super(context);
 		initComponents();
@@ -33,12 +41,20 @@ public class DisplayView extends View {
 		setPadding(1,1,1,1);
 	}
 	
+	public void setWideTime(String wideTime) {
+		this.wideTime = wideTime;
+	}
 	
-
 	public void setTime(CharSequence time) {
-		this.time = time.toString();
-		requestLayout();
-		invalidate();
+		if(!this.time.equals(time)) {
+			this.time = time.toString();
+			if(screenSaver) {
+				vF = r.nextFloat();
+				hF = r.nextFloat();
+			}
+			requestLayout();
+			invalidate();
+		}
 	}
 	
 	public void setSize(float size) {
@@ -60,6 +76,11 @@ public class DisplayView extends View {
 	
 	public void setScreenSaver(boolean screenSaver) {
 		this.screenSaver = screenSaver;
+		if(!screenSaver) {
+			vF = 0.5f;
+			hF = 0.5f;
+		}
+
 		requestLayout();
 		invalidate();
 	}
@@ -129,7 +150,7 @@ public class DisplayView extends View {
 			return;
 		
 		Rect boundingBox1 = new Rect(0, 0, 0, 0);
-		paint.getTextBounds("28:88", 0, "28:88".length(), boundingBox1);
+		paint.getTextBounds(wideTime, 0, wideTime.length(), boundingBox1);
 		Rect boundingBox2 = new Rect(0, 0, 0, 0);
 		paint.getTextBounds(time, 0, time.length(), boundingBox2);
 		
@@ -138,16 +159,7 @@ public class DisplayView extends View {
 		
 		
 		float horzDelta = (boundingBox1.width() - boundingBox2.width());
-		 
-		String vChar = time.substring(time.indexOf(":")-1,time.indexOf(":"));
-		String hChar = time.substring(time.length()-1,time.length());
-		float vF = 0.5f;
-		float hF = 0.5f;
-		if(screenSaver) {
-			vF = (float)Integer.valueOf(vChar) * 0.1f;
-			hF = (float)Integer.valueOf(hChar) * 0.1f;
-		}
-		
+
 		canvas.drawText(time, (horz*hF)+horzDelta, vert*vF+boundingBox2.height(), paint);
 		invalidate();
 		return;
