@@ -177,7 +177,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 			startActivityForResult(intent, 0);
 		}
 		if (menuItem.getItemId() == R.id.menu_changelog) {
-			
+			showDialog(DIALOG_CHANGELOG);
 		}
 		return true;
 
@@ -196,7 +196,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		
-		prefs.getString("last_changelog", "");
+		lastChangelog = prefs.getString("last_changelog", "");
 		
 		
 		try {
