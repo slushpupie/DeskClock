@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Desk Clock</string>
+    <string name="app_version">1.3</string>
+    <string name="changeLogTitle">Recent Changes</string>
+    <string name="changeLog"> * New Screen Saver mode\n* New method of centering clock (read Market page for details)</string>
+    <string name="ok">OK</string>
     <string name="menu_title_prefs">Preferences</string>
     <string name="pref_title">Preferences</string>
     <string name="pref_summary">Big Digital Clock Preferences</string>
@@ -86,5 +90,6 @@
     <string name="pref_summary_meridiem">Display the literal "AM" or "PM" in the time</string>
     <string name="pref_title_screensaver">Screen Saver</string>
     <string name="pref_summary_screensaver">Periodically move clock around the screen</string>
-    
+    <string name="pref_title_changelog">Show Changelog</string>
+    <string name="pref_summary_changelog">Display Changelog at startup</string>
 </resources>

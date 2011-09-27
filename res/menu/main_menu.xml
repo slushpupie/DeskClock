@@ -3,4 +3,7 @@
   <item
     android:id="@+id/menu_prefs"
     android:title="@string/menu_title_prefs"/>
+  <item
+    android:id="@+id/menu_changelog"
+    android:title="@string/pref_title_changelog"/>
 </menu>

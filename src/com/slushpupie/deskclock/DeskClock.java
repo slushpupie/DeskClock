@@ -1,7 +1,10 @@
 package com.slushpupie.deskclock;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -41,6 +44,8 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private static char digitcharset[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	private static char lettercharset[] = { 'A', 'P' };
 	
+	private static final int DIALOG_CHANGELOG = 0;
+	
 	private Typeface[] fonts;
 
 	private PowerManager.WakeLock wl = null;
@@ -66,6 +71,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private int prefsFont = 0;
 	private int prefsScreenOrientation = -1;
 	private boolean prefsScreenSaver = false;
+	private String lastChangelog = "";
 	
 
 	/** Called when the activity is first created. */
@@ -106,6 +112,11 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 
 		loadPrefs();
+		
+		if(lastChangelog == null || !lastChangelog.equals(getString(R.string.app_version))) {
+			showDialog(DIALOG_CHANGELOG);
+		}
+		
 		configureDisplay();
 		resizeClock();
 		
@@ -165,6 +176,9 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 					DeskClockPreferenceActivity.class);
 			startActivityForResult(intent, 0);
 		}
+		if (menuItem.getItemId() == R.id.menu_changelog) {
+			
+		}
 		return true;
 
 	}
@@ -181,7 +195,10 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		Log.d(LOG_TAG,"loading preferences");
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-
+		
+		prefs.getString("last_changelog", "");
+		
+		
 		try {
 			prefsKeepSreenOn = Integer.valueOf(prefs 
 				.getString(
@@ -472,4 +489,27 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		}
 	}
 
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
+		switch (id) {
+			case DIALOG_CHANGELOG:
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(R.string.changeLog)
+					.setCancelable(false)
+					.setTitle(R.string.changeLogTitle)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(DeskClock.this);
+							SharedPreferences.Editor editor = prefs.edit();
+							editor.putBoolean("pref_changelog", false);
+							editor.putString("last_changelog", getString(R.string.app_version));
+							editor.commit();
+						}
+					});
+				return builder.create();
+			default:
+				return null;
+		}
+	}
 }

@@ -59,6 +59,9 @@
       android:dialogTitle="@string/pref_dialog_title_font"
       android:defaultValue="" android:entryValues="@array/pref_values_font" android:entries="@array/pref_options_font"/>
       
-    
+    <CheckBoxPreference
+      android:key="pref_changelog"
+      android:title="@string/pref_title_changelog"
+      android:summary="@string/pref_summary_changelog" />
         
 </PreferenceScreen>
