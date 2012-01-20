@@ -3,9 +3,11 @@ package com.slushpupie.deskclock;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -67,6 +69,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private PowerManager.WakeLock wl = null;
 	private boolean isRunning = false;
 	private RefreshHandler handler = new RefreshHandler();
+	private final BroadcastReceiver intentReceiver;
 	
 	// current state
 	//private TextView display;
@@ -100,6 +103,26 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		} catch (NoSuchMethodException nsme) {
 			supportMultiTouch = false;
 		}
+
+		intentReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+
+				if(Intent.ACTION_DOCK_EVENT.equals(action)) {
+					int dockState = intent.getIntExtra(Intent.EXTRA_DOCK_STATE, 0);
+					switch(dockState) {
+					case Intent.EXTRA_DOCK_STATE_UNDOCKED:
+						Log.d(LOG_TAG,"received EXTRA_DOCK_STATE_UNDOCKED");
+						finish();
+						break;
+					case Intent.EXTRA_DOCK_STATE_DESK:
+						Log.d(LOG_TAG,"received EXTRA_DOCK_STATE_DESK");
+						break;
+					}
+				}
+			}			
+		};
 	}
 	
 	/** Called when the activity is first created. */
@@ -168,6 +191,10 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	public void onStart() {
 		super.onStart();
 
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intent.ACTION_DOCK_EVENT);
+		registerReceiver(intentReceiver, filter);
+
 		isRunning = true;
 		updateTime();
 	}
@@ -176,6 +203,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	@Override
 	public void onStop() {
 		setScreenLock(0); //release any wakelocks
+		unregisterReceiver(intentReceiver);
 		isRunning = false;
 		super.onStop();
 	}
