@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -86,6 +87,15 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 		layout = (LinearLayout) findViewById(R.id.layout);
 		display = (DisplayView) findViewById(R.id.display);
+		display.setOnLongClickListener(new View.OnLongClickListener() {
+			public boolean onLongClick(View v) {
+				if(v.equals(display)) {
+					openOptionsMenu();
+					return true;
+				}
+				return false;
+			}
+		});
 		
 		fonts = new Typeface[15];
 		fonts[0] = Typeface.DEFAULT_BOLD;
