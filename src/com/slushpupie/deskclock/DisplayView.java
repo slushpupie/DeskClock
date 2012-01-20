@@ -17,22 +17,9 @@ public class DisplayView extends View {
 	private String time = "88:88";
 	private String wideTime = "88:88";
 	
-	private String hr = "12";
-	private String min = "00";
-	private String sec = "";
-	private String mer = "";
-	
-	private int wideDigit = 0;
-	private int tallDigit = 0;
-	private int wideLetter = 0;
-	private int tallLetter = 0;
-	private int wideColon = 0;
-	private int tallColon = 0;
-	
 	private Paint paint;
 	
 	private boolean screenSaver = false;
-	private boolean drawColon = true;
 	
 	private Random r = new Random();
 
@@ -54,29 +41,13 @@ public class DisplayView extends View {
 		setPadding(1,1,1,1);
 	}
 	
-	public void setWideChar(String wideDigit, String wideLetter) {
-		
-		Rect boundingBox = new Rect(0, 0, 0, 0);
-		paint.getTextBounds(wideDigit, 0, 1, boundingBox);
-		this.wideDigit = boundingBox.width();
-		this.tallDigit = boundingBox.height();
-		paint.getTextBounds(wideLetter, 0, 1, boundingBox);
-		this.wideLetter = boundingBox.width();
-		this.tallLetter = boundingBox.height();
-		paint.getTextBounds(":", 0, 1, boundingBox);
-		this.wideColon = boundingBox.width();
-		this.tallColon = boundingBox.height();
-		
+	public void setWideTime(String wideTime) {
+		this.wideTime = wideTime;
 	}
 	
-	public void setTime(CharSequence time, CharSequence hr, CharSequence min, CharSequence sec, CharSequence mer) {
+	public void setTime(CharSequence time) {
 		if(!this.time.equals(time)) {
 			this.time = time.toString();
-			this.hr = hr.toString();
-			this.min = min.toString();
-			this.sec = sec.toString();
-			this.mer = mer.toString();
-			
 			if(screenSaver) {
 				vF = r.nextFloat();
 				hF = r.nextFloat();
@@ -112,10 +83,6 @@ public class DisplayView extends View {
 
 		requestLayout();
 		invalidate();
-	}
-	
-	public void setDrawColon(boolean drawColon) {
-		this.drawColon = drawColon;
 	}
 	
     @Override
@@ -174,52 +141,30 @@ public class DisplayView extends View {
         }
         return result;
     }
-    
-    private void drawLetter(Canvas canvas, String letter, float width, float x, float y) {
-    	
-    	Rect boundingBox = new Rect(0,0,0,0);
-    	paint.getTextBounds(letter, 0, letter.length(), boundingBox);
 
-    	float dx = (width - boundingBox.width());
-    	canvas.drawText(letter, x+dx, y, paint);
-    }
-
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		if(time == null) 
 			return;
-
-		int maxWidth = wideDigit*4 + wideColon;
-		if(sec.length() > 0) {
-			maxWidth += wideDigit*2 + wideColon;
-		}
-		if(mer.length() > 0) {
-			maxWidth += wideLetter*3;
-		}
 		
-		float horz = ((float)(canvas.getWidth() - maxWidth)) * hF;
-		float vert = ((float)(canvas.getHeight()) * vF  + ((float)tallDigit)/2f);
+		Rect boundingBox1 = new Rect(0, 0, 0, 0);
+		paint.getTextBounds(wideTime, 0, wideTime.length(), boundingBox1);
+		Rect boundingBox2 = new Rect(0, 0, 0, 0);
+		paint.getTextBounds(time, 0, time.length(), boundingBox2);
 		
-		float width = 0;
-		float pad = (float)wideDigit * 0.1f;
-		drawLetter(canvas, hr, wideDigit*2+pad, horz, vert); width += wideDigit*2+pad+pad;
-		if(drawColon) 
-			drawLetter(canvas, ":", wideColon+pad+pad, horz+width, vert);
-		width += wideColon+pad+pad+pad;
-		drawLetter(canvas, min, wideDigit*2+pad, horz+width, vert); width += wideDigit*2+pad+pad;
-		if(sec.length() > 0) {
-			if(drawColon)
-				drawLetter(canvas, ":", wideColon+pad+pad, horz+width, vert);
-			width += wideColon+pad+pad+pad;
-			drawLetter(canvas, sec, wideDigit*2+pad, horz+width, vert); width += wideDigit*2+pad+pad;
-		}
-		if(mer.length() > 0) {
-			drawLetter(canvas, " ", wideColon+pad, horz+width, vert); width += wideColon+pad+pad;
-			drawLetter(canvas, mer, wideLetter*2+pad, horz+width, vert); width += wideLetter*2+pad+pad;
-		}
+		float horz = ((float)(canvas.getWidth() - boundingBox1.width()));
+		float vert = ((float)(canvas.getHeight() - boundingBox1.height()));
+		
+		
+		float horzDelta = (boundingBox1.width() - boundingBox2.width());
 
+		canvas.drawText(time, (horz*hF)+horzDelta, vert*vF+boundingBox2.height(), paint);
 		invalidate();
 		return;
-	}	
+	}
+	
+	
+	
 }

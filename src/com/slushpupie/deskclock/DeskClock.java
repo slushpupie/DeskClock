@@ -364,7 +364,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				bletter = lettercharset[i];
 				w = bb.width();
 			}
-		}		
+		}
 
 		String str = String.format("%c%c:%c%c", bdigit,bdigit,bdigit,bdigit);
 		
@@ -384,10 +384,10 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		int width = digitBounds.width(); 
 		leftPadding = width * -4;
 		
+		display.setWideTime(str);
 		display.setFont(fonts[prefsFont]);
 		display.setPadding(leftPadding, 0, 0, 0);
 		display.setSize(fontSize );
-		display.setWideChar(String.valueOf(bdigit), String.valueOf(bletter));
 
 		needsResizing = false;
 		updateTime();
@@ -402,35 +402,26 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		Calendar cal = Calendar.getInstance();
 
 		char colon = ':';
-		if(prefsBlinkColon) { 
-			display.setDrawColon(cal.get(Calendar.SECOND) % 2 == 0);
+		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0) {
+			colon = ' ';
 		}
 		
 		
-		String format = "h:mm";
-		String hr = "h";
-		if (prefsMilitaryTime)
-			hr = "k";
+		String format = String.format("h%cmm",colon);
 
-		String min = "mm";
+		if (prefsMilitaryTime)
+			format = String.format("k%cmm",colon);
+
+		if (prefsShowSeconds)
+			format = format + String.format("%css",colon);
 		
-		String sec = "";
-		if (prefsShowSeconds) {
-			sec = "ss";
-			format = format + ":ss";
-		}
-		
-		String meridiem = "";
 		if (prefsShowMeridiem)
-			meridiem = "aa";
+			format = format + " aa";
 
 		//Log.d(LOG_TAG,"Setting time to "+localTime.format(format));
 		
-		display.setTime(DateFormat.format(format, cal), 
-				DateFormat.format(hr, cal),
-				DateFormat.format(min, cal),
-				DateFormat.format(sec, cal),
-				DateFormat.format(meridiem,cal));
+		
+		display.setTime(DateFormat.format(format, cal));
 		//layout.postInvalidate();
 		if(isRunning)
 			handler.tick();
