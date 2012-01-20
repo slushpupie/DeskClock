@@ -22,11 +22,14 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -34,16 +37,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 
 
-public class DeskClock extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener
+public class DeskClock extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener, OnTouchListener
  {
 
 	private static final String LOG_TAG = "DeskClock";
 	private static char digitcharset[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 	private static char lettercharset[] = { 'A', 'P' };
+	
+	//for pinch-zoom
+	private static int NONE = 0;
+	private static int DRAG = 1;
+	private static int ZOOM = 2;
+	private int mode = NONE;
+	private float oldDist = 1f;
+	private Method getXMethod;
+	private Method getYMethod;
+	private boolean supportMultiTouch = false;
 	
 	private static final int DIALOG_CHANGELOG = 0;
 	
@@ -75,6 +90,18 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private String lastChangelog = "";
 	private int prefsScale = 100;
 
+	public DeskClock() {
+		super();
+		//determine if multitouch is really supported
+		try {
+			getXMethod = MotionEvent.class.getMethod("getX", new Class[] { int.class });
+			getYMethod = MotionEvent.class.getMethod("getY", new Class[] { int.class });
+			supportMultiTouch = true;
+		} catch (NoSuchMethodException nsme) {
+			supportMultiTouch = false;
+		}
+	}
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +123,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				return false;
 			}
 		});
+		display.setOnTouchListener(this);
 		
 		fonts = new Typeface[15];
 		fonts[0] = Typeface.DEFAULT_BOLD;
@@ -529,6 +557,69 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				return builder.create();
 			default:
 				return null;
+		}
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if(!supportMultiTouch) 
+			return false;
+		
+		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+		case MotionEvent.ACTION_DOWN:
+			mode = DRAG;
+			break;
+		case MotionEvent.ACTION_POINTER_DOWN:
+			oldDist = spacing(event);
+			if(oldDist > 10f) {
+				mode = ZOOM;
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_POINTER_UP:
+			mode = NONE;
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if(mode == DRAG) {
+				//..
+			} else if (mode == ZOOM) {
+				float newDist = spacing(event);
+				if (newDist > 10f) {
+					float scaleF = newDist / oldDist;
+					int scale = (int) (scaleF * 100.0);
+					if(scale < 0) scale = scale * -1;
+					if(scale > 100) scale = 100;
+					
+					// change font size
+					SharedPreferences prefs = PreferenceManager
+							.getDefaultSharedPreferences(this);
+					prefs.edit().putInt("pref_scale", scale).commit();
+				}
+			}
+			break;
+		}
+		if(mode == ZOOM) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private float spacing(MotionEvent event) {
+		try {
+			float x0 = ((Float) getXMethod.invoke(event, 0)).floatValue();
+			float x1 = ((Float) getXMethod.invoke(event, 1)).floatValue();
+			float x = x0 - x1;
+			float y0 = ((Float) getYMethod.invoke(event, 0)).floatValue();
+			float y1 = ((Float) getYMethod.invoke(event, 1)).floatValue();
+			float y = y0 - y1;
+			return FloatMath.sqrt(x*x + y*y);
+		} catch (IllegalArgumentException iae) {
+			return 0;
+		} catch (IllegalAccessException e) {
+			return 0;
+		} catch (InvocationTargetException e) {
+			return 0;
 		}
 	}
 }
