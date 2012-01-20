@@ -72,7 +72,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	private int prefsScreenOrientation = -1;
 	private boolean prefsScreenSaver = false;
 	private String lastChangelog = "";
-	
+	private int prefsScale = 100;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -86,7 +86,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 		layout = (LinearLayout) findViewById(R.id.layout);
 		display = (DisplayView) findViewById(R.id.display);
-
+		
 		fonts = new Typeface[15];
 		fonts[0] = Typeface.DEFAULT_BOLD;
 		fonts[1] = Typeface.SANS_SERIF;
@@ -278,6 +278,12 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 			display.setScreenSaver(prefsScreenSaver);
 			needsResizing = true;
 		}
+		
+		int sc = prefs.getInt("pref_scale", 100);
+		if(sc != prefsScale) {
+			prefsScale = prefs.getInt("pref_scale", 100);
+			needsResizing = true;
+		}
 
 	}
 
@@ -375,6 +381,9 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
 		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
+		if(prefsScale != 100) {
+			fontSize = fontSize * (0.01f * ((float)prefsScale));
+		}
 		if(prefsScreenSaver) {
 			fontSize = fontSize * 0.8f;
 		}

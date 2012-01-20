@@ -1,4 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.slushpupie.com/deskclock"
 	android:title="@string/pref_title"
 	android:key="preferences"
 	android:summary="@string/pref_summary"
@@ -58,6 +59,15 @@
       android:summary="@string/pref_summary_font"
       android:dialogTitle="@string/pref_dialog_title_font"
       android:defaultValue="" android:entryValues="@array/pref_values_font" android:entries="@array/pref_options_font"/>
+    
+    <com.slushpupie.deskclock.SeekBarPreference
+      android:key="pref_scale"
+      android:title="@string/pref_title_scale"
+      android:summary="@string/pref_summary_scale"
+      android:dialogMessage="@string/pref_dialog_message_scale"
+      android:text="@string/pref_text_scale"
+      android:defaultValue="100"
+      android:max="100" />
       
     <CheckBoxPreference
       android:key="pref_changelog"

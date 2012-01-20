@@ -92,4 +92,8 @@
     <string name="pref_summary_screensaver">Periodically move clock around the screen</string>
     <string name="pref_title_changelog">Show Changelog</string>
     <string name="pref_summary_changelog">Display Changelog at startup</string>
+    <string name="pref_title_scale">Scale Font</string>
+    <string name="pref_summary_scale">Make clock take up less than maximum size</string>
+    <string name="pref_dialog_message_scale">Scale down the font</string>
+    <string name="pref_text_scale">&#37;</string>
 </resources>

@@ -62,7 +62,6 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements  
 	    });
 	    
 	    
-	    
 	  }
 
 	public void colorChanged(String key, int color) {
