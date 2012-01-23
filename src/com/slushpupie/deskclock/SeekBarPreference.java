@@ -1,3 +1,8 @@
+/* The following code was written by Matthew Wiggins 
+ * and is released under the APACHE 2.0 license 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
 package com.slushpupie.deskclock;
 
 import android.content.Context;
