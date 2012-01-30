@@ -53,7 +53,8 @@ public class DisplayView extends View {
 	}
 	
 	private void initComponents() {
-		paint = new Paint();
+		//Default Paint object does "DEV_KERNING" which kerns off the device screen, ugly.
+		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		setPadding(1,1,1,1);
 	}
 	
@@ -165,18 +166,26 @@ public class DisplayView extends View {
 		if(time == null) 
 			return;
 		
+		float[] widths = new float[time.length()];
+		float wSum = 0;
+		paint.getTextWidths(time, widths);
+		for(float w : widths) wSum += w;
+		widths = new float[wideTime.length()];
+		float wmSum = 0;
+		paint.getTextWidths(wideTime, widths);
+		for(float w : widths) wmSum += w;
+		
 		Rect boundingBox1 = new Rect(0, 0, 0, 0);
 		paint.getTextBounds(wideTime, 0, wideTime.length(), boundingBox1);
 		Rect boundingBox2 = new Rect(0, 0, 0, 0);
 		paint.getTextBounds(time, 0, time.length(), boundingBox2);
 		
-		float horz = ((float)(canvas.getWidth() - boundingBox1.width()));
+		float horz = ((float)(canvas.getWidth() - wmSum));
 		float vert = ((float)(canvas.getHeight() - boundingBox1.height()));
 		
 		
-		float horzDelta = (boundingBox1.width() - boundingBox2.width());
-
-		canvas.drawText(time, (horz*hF)+horzDelta, vert*vF+boundingBox2.height(), paint);
+		float horzDelta = (wmSum - wSum)/2;
+		canvas.drawText(time, (horz*hF)+horzDelta, vert*vF+boundingBox1.height(), paint);
 		invalidate();
 		return;
 	}

@@ -97,6 +97,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 
 	// backed by preferences
 	private int prefsKeepSreenOn = 0;
+	private boolean prefsLeadingZero = false;
 	private boolean prefsMilitaryTime = false;
 	private boolean prefsShowMeridiem = false;
 	private int prefsFontColor = Color.WHITE;
@@ -164,28 +165,24 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		});
 		display.setOnTouchListener(this);
 		
-		fonts = new Typeface[15];
+		fonts = new Typeface[16];
 		fonts[0] = Typeface.DEFAULT_BOLD;
 		fonts[1] = Typeface.SANS_SERIF;
 		fonts[2] = Typeface.SERIF;
 		fonts[3] = Typeface.MONOSPACE;
-		fonts[4] = Typeface.createFromAsset(getAssets(),
-				"fonts/Abduction2000.ttf");
+		fonts[4] = Typeface.createFromAsset(getAssets(), "fonts/Abduction2000.ttf");
 		fonts[5] = Typeface.createFromAsset(getAssets(), "fonts/DSPoint.ttf");
-		fonts[6] = Typeface
-				.createFromAsset(getAssets(), "fonts/DSTerminal.ttf");
+		fonts[6] = Typeface.createFromAsset(getAssets(), "fonts/DSTerminal.ttf");
 		fonts[7] = Typeface.createFromAsset(getAssets(), "fonts/DT104.ttf");
 		fonts[8] = Typeface.createFromAsset(getAssets(), "fonts/Delusion.ttf");
-		// fonts[ 9] = Typeface.createFromAsset(getAssets(),
-		// "fonts/DigitalReadout.ttf");
-		// fonts[10] = Typeface.createFromAsset(getAssets(),
-		// "fonts/DigitalReadoutItialics.ttf");
+		fonts[ 9] = Typeface.createFromAsset(getAssets(), "fonts/jd_scarabeo.ttf");
+		fonts[10] = Typeface.createFromAsset(getAssets(), "fonts/stencilla.ttf");
 		fonts[11] = Typeface.createFromAsset(getAssets(), "fonts/Digital2.ttf");
-		fonts[12] = Typeface.createFromAsset(getAssets(),
-				"fonts/DigitaldreamFat.ttf");
-		fonts[13] = Typeface.createFromAsset(getAssets(),
-				"fonts/DisplayDots.ttf");
+		fonts[12] = Typeface.createFromAsset(getAssets(), "fonts/DigitaldreamFat.ttf");
+		fonts[13] = Typeface.createFromAsset(getAssets(), "fonts/DisplayDots.ttf");
 		fonts[14] = Typeface.createFromAsset(getAssets(), "fonts/digi.otf");
+		fonts[15] = Typeface.createFromAsset(getAssets(), "fonts/GentiumBinary.ttf");
+
 
 
 		loadPrefs();
@@ -307,6 +304,11 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 						"pref_military_time",
 						false);
 
+		prefsLeadingZero = prefs
+				.getBoolean(
+						"pref_leading_zero",
+						false);
+		
 		boolean showMeridiem = prefs
 				.getBoolean(
 						"pref_meridiem",
@@ -461,7 +463,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		if (prefsShowMeridiem)
 			str = String.format("%s %cM", str, bletter);
 
-		Rect boundingBox = new Rect(0, 0, displayWidth, displayHeight);
+		Rect boundingBox = new Rect(0, 0, displayWidth-5, displayHeight-5);
 		float fontSize = fitTextToRect(fonts[prefsFont], str, boundingBox);
 		if(prefsScale != 100) {
 			fontSize = fontSize * (0.01f * ((float)prefsScale));
@@ -491,28 +493,44 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		}
 
 		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, 7);
 
 		char colon = ':';
 		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0) {
 			colon = ' ';
 		}
 		
+		StringBuffer format = new StringBuffer();
 		
-		String format = String.format("h%cmm",colon);
-
-		if (prefsMilitaryTime)
-			format = String.format("k%cmm",colon);
-
-		if (prefsShowSeconds)
-			format = format + String.format("%css",colon);
+		if(prefsMilitaryTime)
+			format.append("kk");
+		else if(prefsLeadingZero)
+			format.append("hh");
+		else
+			format.append("h");
+		
+		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0)
+			format.append(" ");
+		else
+			format.append(":");
+		
+		format.append("mm");
+		
+		if(prefsShowSeconds) {
+			if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0)
+				format.append(" ");
+			else
+				format.append(":");
+			format.append("ss");
+		}
 		
 		if (prefsShowMeridiem)
-			format = format + " aa";
+			format.append(" aa");
 
 		//Log.d(LOG_TAG,"Setting time to "+localTime.format(format));
 		
 		
-		display.setTime(DateFormat.format(format, cal));
+		display.setTime(DateFormat.format(format.toString(), cal));
 		//layout.postInvalidate();
 		if(isRunning)
 			handler.tick();
@@ -560,11 +578,16 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	}
 
 	private Rect getBoundingBox(String text, Typeface font, float size) {
-		Rect r = new Rect(0, 0, 0, 0); 
-		Paint paint = new Paint(); 
+		Rect r = new Rect(0, 0, 0, 0);
+		float widths[] = new float[text.length()];
+		float width = 0;
+		Paint paint = new Paint(0);
 		paint.setTypeface(font);
 		paint.setTextSize(size);
 		paint.getTextBounds(text, 0, text.length(), r);
+		paint.getTextWidths(text, widths);
+		for(float w : widths) width += w;
+		r.right = (int) width;
 		return r;
 	}
 	

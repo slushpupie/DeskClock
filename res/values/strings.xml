@@ -22,7 +22,7 @@ limitations under the License.
     <string name="ok">OK</string>
     <string name="menu_title_prefs">Preferences</string>
     <string name="pref_title">Preferences</string>
-    <string name="pref_summary">Big Digital Clock Preferences</string>
+    <string name="pref_summary">Desk Clock Preferences</string>
     <string name="pref_title_keep_screen_on">Keep Screen On</string>
     <string name="pref_summary_keep_screen_on">Prevent display from sleeping</string>
     <string name="pref_dialog_title_keep_screen_on">Keep Screen On</string>
@@ -31,6 +31,9 @@ limitations under the License.
     <string name="pref_summary_military_time">12 hour or military time</string>
     <string name="pref_dialog_title_military_time">12/24 Hour Time</string>
     <string name="pref_default_military_time">0</string>
+    <string name="pref_title_leading_zero">Leading 0 on Hour</string>
+    <string name="pref_summary_leading_zero">Show hour as 7 or 07 (always on for Military time)</string>
+    <string name="pref_default_leading_zero">0</string>
     <string name="pref_title_show_seconds">Show Seconds</string>
     <string name="pref_title_blink_seconds">Blink seconds</string>
     <string name="pref_summary_blink_seconds">Blink the colon each second. Warning: looks good on monospaced fonts only</string>
@@ -40,7 +43,7 @@ limitations under the License.
     <string name="pref_title_font">Font</string>
     <string name="pref_summary_font">Clock Face Font</string>
     <string name="pref_dialog_title_font">Choose Font</string>
-    <string name="pref_default_font">0</string>
+    <string name="pref_default_font">14</string>
     <string name="settings_bg_color_confirm">Confirm</string>
     <string name="settings_default_color_confirm">Default Color</string>
     <string name="settings_bg_color_dialog">Pick a color</string>
@@ -55,38 +58,40 @@ limitations under the License.
         <item>2</item>
     </string-array>
     <string-array name="pref_options_font">
-    	<item>System Default</item>
-    	<item>System San Serif</item>
-    	<item>System Serif</item>
-    	<item>System Monospace</item>
     	<item>Abduction 2000</item>
     	<item>DS Point</item>
     	<item>DS Terminal</item>
     	<item>DT 104</item>
     	<item>Delusion</item>
-    	<item>Digital Readout</item>
-    	<item>Digital Readout - Itialics</item>
     	<item>Digital2</item>
     	<item>Digital Dream</item>
     	<item>Display Dots</item>
     	<item>Digi</item>
+    	<item>JD Scarabeo</item>
+    	<item>Stencilla</item>
+    	<item>Binary</item>
+    	<item>System Default</item>
+    	<item>System San Serif</item>
+    	<item>System Serif</item>
+    	<item>System Monospace</item>
     </string-array>
     <string-array name="pref_values_font">
-    	<item>0</item>	
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
 		<item>4</item>
 		<item>5</item>
 		<item>6</item>
 		<item>7</item>
 		<item>8</item>
-		<item>9</item>
-		<item>10</item>
 		<item>11</item>
 		<item>12</item>
 		<item>13</item>
 		<item>14</item>
+		<item>9</item>
+		<item>10</item>
+		<item>15</item>
+		<item>0</item>	
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
 	</string-array>
 	<string name="pref_title_screen_orientation">Screen Orientation</string>
 	<string name="pref_summary_screen_orientation">Allow screen to rotate</string>

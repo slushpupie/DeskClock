@@ -43,6 +43,11 @@ limitations under the License.
       android:summary="@string/pref_summary_military_time" />
       
     <CheckBoxPreference
+      android:key="pref_leading_zero"
+      android:title="@string/pref_title_leading_zero"
+      android:summary="@string/pref_summary_leading_zero" />
+      
+    <CheckBoxPreference
       android:key="pref_meridiem"
       android:title="@string/pref_title_meridiem"
       android:summary="@string/pref_summary_meridiem" />
