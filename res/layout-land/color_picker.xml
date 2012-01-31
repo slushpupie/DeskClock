@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+Copyright (C) 2012 Jay Kline
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/com.slushpupie.deskclock"
+	android:layout_width="@dimen/dimTotalW"
+	android:layout_height="@dimen/dimTotalH"
+	android:id="@+id/color_picker_view">
+	<RelativeLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:id="@+id/Pallette"
+		android:orientation="horizontal"
+		android:padding="@dimen/dimSpacer"
+		>
+	    <com.slushpupie.deskclock.ImageViewText
+    		android:layout_height="@dimen/dimPreview"
+    		android:layout_width="@dimen/dimStrip"
+	    	android:background="#aff"
+	    	android:id="@+id/NewColor"
+	    	android:layout_margin="@dimen/dimSpacer"
+	    	app:text="@string/settings_bg_color_confirm"
+	    />
+	    <com.slushpupie.deskclock.ImageViewText
+	    	android:layout_height="@dimen/dimPreview"
+	    	android:layout_width="@dimen/dimStrip"
+	    	android:background="#ffa"
+	    	android:id="@+id/OldColor"
+	    	android:layout_below="@+id/NewColor"
+	    	android:layout_margin="@dimen/dimSpacer"
+	    	app:text="@string/settings_default_color_confirm"
+	    />
+	    <com.slushpupie.deskclock.SaturationValueView
+	    	android:layout_height="@dimen/dimSquare"
+	    	android:layout_width="@dimen/dimSquare"
+           	android:background="#faa"
+	    	android:id="@+id/SatVal"
+	    	android:layout_toRightOf="@+id/OldColor"
+			android:layout_margin="@dimen/dimSpacer"
+		    />
+	    <com.slushpupie.deskclock.HueView
+	    	android:background="#aaf"
+	    	android:id="@+id/Hue"
+	    	android:layout_toRightOf="@+id/SatVal"
+	    	android:layout_width="@dimen/dimStrip"
+	    	android:layout_height="@dimen/dimSquare"
+			android:layout_margin="@dimen/dimSpacer"
+		/>
+		<ImageView
+			android:layout_height="@dimen/dimCursor"
+			android:layout_width="@dimen/dimCursor"
+			android:src="@drawable/satvalcursor"
+			android:id="@+id/SatValCursor"
+			android:scaleType="matrix"
+			android:layout_alignLeft="@+id/SatVal"
+			android:layout_alignTop="@+id/SatVal"
+		/>
+		<ImageView
+			android:layout_height="@dimen/dimCursor"
+			android:layout_width="@dimen/dimStrip"
+			android:src="@drawable/huecursor"
+			android:id="@+id/HueCursor"
+			android:scaleType="matrix"
+			android:layout_alignLeft="@+id/Hue"
+			android:layout_alignTop="@+id/Hue"
+		/>
+</RelativeLayout>
+<TextView
+android:id="@+id/Debug" android:layout_width="wrap_content" android:layout_height="wrap_content" android:shadowDx="1" android:shadowDy="1" android:shadowRadius="1" android:shadowColor="#ff000000"/>
+</FrameLayout>
