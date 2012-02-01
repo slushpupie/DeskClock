@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<merge
+<FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res/com.slushpupie.deskclock"
 	android:layout_width="@dimen/dimTotalW"
@@ -81,4 +81,4 @@ limitations under the License.
 </RelativeLayout>
 <TextView
 android:id="@+id/Debug" android:layout_width="wrap_content" android:layout_height="wrap_content" android:shadowDx="1" android:shadowDy="1" android:shadowRadius="1" android:shadowColor="#ff000000"/>
-</merge>
+</FrameLayout>
