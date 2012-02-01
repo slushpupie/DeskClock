@@ -16,9 +16,9 @@ limitations under the License.
 -->
 <resources>
     <string name="app_name">Desk Clock</string>
-    <string name="app_version">1.4</string>
+    <string name="app_version">1.5</string>
     <string name="changeLogTitle">Recent Changes</string>
-    <string name="changeLog"> * Font scaling (with pinch-zoom)\n* Long press for menu (for devices without Menu button)\n* Handles Desk Docking events</string>
+    <string name="changeLog">* Improved font handling\n* New Fonts\n* New color picker\n* Improved wake-lock mechanism\n* Donate version <a href="http://market.android.com/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
     <string name="menu_title_prefs">Preferences</string>
     <string name="pref_title">Preferences</string>

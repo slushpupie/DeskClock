@@ -36,9 +36,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.Time;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.util.Log;
@@ -51,7 +54,9 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -640,12 +645,23 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 	}
 
 	protected Dialog onCreateDialog(int id) {
-		Dialog dialog;
 		switch (id) {
 			case DIALOG_CHANGELOG:
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setMessage(R.string.changeLog)
+				//Standard AlertDialog does not support HTML-style links. 
+				//So rebuild the ScrollView->TextView with the appropriate 
+				//settings and set the view directly.
+				TextView tv = new TextView(this);
+				tv.setPadding(5, 5, 5, 5);
+				tv.setLinksClickable(true);
+				tv.setMovementMethod(LinkMovementMethod.getInstance());
+				tv.setText(R.string.changeLog);
+				tv.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+				ScrollView sv = new ScrollView(this);
+				sv.setPadding(14, 2, 10, 12);
+				sv.addView(tv);
+				builder.setView(sv)
 					.setCancelable(false)
 					.setTitle(R.string.changeLogTitle)
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
