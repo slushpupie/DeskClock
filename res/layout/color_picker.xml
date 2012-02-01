@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<FrameLayout
+<merge
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res/com.slushpupie.deskclock"
 	android:layout_width="@dimen/dimTotalW"
@@ -80,4 +80,4 @@ limitations under the License.
 	    	app:text="@string/settings_default_color_confirm"
 	    />
 </RelativeLayout>
-</FrameLayout>
+</merge>

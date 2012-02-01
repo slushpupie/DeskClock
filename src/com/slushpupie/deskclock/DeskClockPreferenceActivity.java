@@ -24,62 +24,54 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 
-public class DeskClockPreferenceActivity extends PreferenceActivity { 
+public class DeskClockPreferenceActivity extends PreferenceActivity {
 
-	public void onCreate(Bundle savedInstance) {
-		super.onCreate(savedInstance);
-		addPreferencesFromResource(R.xml.preferences);
+  public void onCreate(Bundle savedInstance) {
+    super.onCreate(savedInstance);
+    addPreferencesFromResource(R.xml.preferences);
 
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
+    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		Preference colorPref = findPreference("pref_color");
-		final ColorPickerDialog clPicker = new ColorPickerDialog(this,
-				prefs.getInt("pref_color", Color.WHITE), Color.WHITE,
-				new FontColorChangeListener());
-		colorPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference preference) {
-				clPicker.show();
-				return true;
-			}
-		});
+    Preference colorPref = findPreference("pref_color");
+    final ColorPickerDialog clPicker = new ColorPickerDialog(this, prefs.getInt("pref_color",
+        Color.WHITE), Color.WHITE, new FontColorChangeListener());
+    colorPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+      public boolean onPreferenceClick(Preference preference) {
+        clPicker.show();
+        return true;
+      }
+    });
 
-		Preference bgColorPref = findPreference("pref_background_color");
-		final ColorPickerDialog bgPicker = new ColorPickerDialog(this,
-				prefs.getInt("pref_background_color", Color.BLACK),
-				Color.BLACK, new BackgroundColorChangeListener());
-		bgColorPref
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-					public boolean onPreferenceClick(Preference preference) {
-						bgPicker.show();
-						return true;
-					}
-				});
-	}
+    Preference bgColorPref = findPreference("pref_background_color");
+    final ColorPickerDialog bgPicker = new ColorPickerDialog(this, prefs.getInt(
+        "pref_background_color", Color.BLACK), Color.BLACK, new BackgroundColorChangeListener());
+    bgColorPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+      public boolean onPreferenceClick(Preference preference) {
+        bgPicker.show();
+        return true;
+      }
+    });
+  }
 
-	private class FontColorChangeListener implements
-			ColorPickerDialog.OnColorSelectListener {
+  private class FontColorChangeListener implements ColorPickerDialog.OnColorSelectListener {
 
-		@Override
-		public void onNewColor(int color) {
-			SharedPreferences.Editor prefs = PreferenceManager
-					.getDefaultSharedPreferences(
-							DeskClockPreferenceActivity.this).edit();
-			prefs.putInt("pref_color", color);
-			prefs.commit();
-		}
-	}
+    @Override
+    public void onNewColor(int color) {
+      SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(
+          DeskClockPreferenceActivity.this).edit();
+      prefs.putInt("pref_color", color);
+      prefs.commit();
+    }
+  }
 
-	private class BackgroundColorChangeListener implements
-			ColorPickerDialog.OnColorSelectListener {
+  private class BackgroundColorChangeListener implements ColorPickerDialog.OnColorSelectListener {
 
-		@Override
-		public void onNewColor(int color) {
-			SharedPreferences.Editor prefs = PreferenceManager
-					.getDefaultSharedPreferences(
-							DeskClockPreferenceActivity.this).edit();
-			prefs.putInt("pref_background_color", color);
-			prefs.commit();
-		}
-	}
+    @Override
+    public void onNewColor(int color) {
+      SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(
+          DeskClockPreferenceActivity.this).edit();
+      prefs.putInt("pref_background_color", color);
+      prefs.commit();
+    }
+  }
 }

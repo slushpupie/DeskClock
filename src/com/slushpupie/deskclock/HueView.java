@@ -20,54 +20,53 @@ import android.view.View;
 
 public class HueView extends View {
 
-	Paint paint;
-	Shader hueShader;
+  Paint paint;
+  Shader hueShader;
 
-	/**
-	 * @param context
-	 */
-	public HueView(Context context) {
-		super(context);
-	}
+  /**
+   * @param context
+   */
+  public HueView(Context context) {
+    super(context);
+  }
 
-	/**
-	 * @param context
-	 * @param attrs
-	 */
-	public HueView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+  /**
+   * @param context
+   * @param attrs
+   */
+  public HueView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-	/**
-	 * @param context
-	 * @param attrs
-	 * @param defStyle
-	 */
-	public HueView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+  /**
+   * @param context
+   * @param attrs
+   * @param defStyle
+   */
+  public HueView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.view.View#onDraw(android.graphics.Canvas)
-	 */
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+  /*
+   * (non-Javadoc)
+   * 
+   * @see android.view.View#onDraw(android.graphics.Canvas)
+   */
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
 
-		int colors[] = { 0xffff0000, 0xffffff00, 0xff00ff00, 0xff00ffff,
-				0xff0000ff, 0xffff00ff, 0xffff0000 };
+    int colors[] = { 0xffff0000, 0xffffff00, 0xff00ff00, 0xff00ffff, 0xff0000ff, 0xffff00ff,
+        0xffff0000 };
 
-		if (null == paint) {
-			paint = new Paint();
-			hueShader = new LinearGradient(0, 0, 0, getMeasuredHeight(),
-					colors, null, TileMode.CLAMP);
-		}
+    if (null == paint) {
+      paint = new Paint();
+      hueShader = new LinearGradient(0, 0, 0, getMeasuredHeight(), colors, null, TileMode.CLAMP);
+    }
 
-		paint.setShader(hueShader);
-		canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+    paint.setShader(hueShader);
+    canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
 
-	}
+  }
 
 }

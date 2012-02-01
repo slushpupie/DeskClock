@@ -15,104 +15,115 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class SeekBarPreference extends DialogPreference  implements SeekBar.OnSeekBarChangeListener {
-	private static final String androidns="http://schemas.android.com/apk/res/android";
+public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
+  private static final String androidns = "http://schemas.android.com/apk/res/android";
 
-	  private SeekBar mSeekBar;
-	  private TextView mSplashText,mValueText;
-	  private Context mContext;
+  private SeekBar mSeekBar;
+  private TextView mSplashText, mValueText;
+  private Context mContext;
 
-	  private String mDialogMessage, mSuffix;
-	  private int mDefault, mMax, mValue = 0;
+  private String mDialogMessage, mSuffix;
+  private int mDefault, mMax, mValue = 0;
 
-	  public SeekBarPreference(Context context, AttributeSet attrs) { 
-	    super(context,attrs); 
-	    mContext = context;
-	    
-	    int res = attrs.getAttributeResourceValue(androidns, "dialogMessage", -1);
-	    if(res == -1) {
-	    	mDialogMessage = attrs.getAttributeValue(androidns,"dialogMessage");
-	    } else {
-	    	mDialogMessage = context.getText(res).toString();
-	    }
-	    res = attrs.getAttributeResourceValue(androidns, "text", -1);
-	    if(res == -1) {
-	    	mSuffix = attrs.getAttributeValue(androidns,"text");
-	    } else {
-	    	mSuffix = context.getText(res).toString();
-	    }
-	    
-	    mDefault = attrs.getAttributeIntValue(androidns,"defaultValue", 0);
-	    mMax = attrs.getAttributeIntValue(androidns,"max", 100);
+  public SeekBarPreference(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    mContext = context;
 
-	    Log.d("DeskClock", "text: "+mSuffix);
-	  }
-	  @Override 
-	  protected View onCreateDialogView() {
-	    LinearLayout.LayoutParams params;
-	    LinearLayout layout = new LinearLayout(mContext);
-	    layout.setOrientation(LinearLayout.VERTICAL);
-	    layout.setPadding(6,6,6,6);
+    int res = attrs.getAttributeResourceValue(androidns, "dialogMessage", -1);
+    if (res == -1) {
+      mDialogMessage = attrs.getAttributeValue(androidns, "dialogMessage");
+    } else {
+      mDialogMessage = context.getText(res).toString();
+    }
+    res = attrs.getAttributeResourceValue(androidns, "text", -1);
+    if (res == -1) {
+      mSuffix = attrs.getAttributeValue(androidns, "text");
+    } else {
+      mSuffix = context.getText(res).toString();
+    }
 
-	    mSplashText = new TextView(mContext);
-	    if (mDialogMessage != null)
-	      mSplashText.setText(mDialogMessage);
-	    layout.addView(mSplashText);
+    mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 0);
+    mMax = attrs.getAttributeIntValue(androidns, "max", 100);
 
-	    mValueText = new TextView(mContext);
-	    mValueText.setGravity(Gravity.CENTER_HORIZONTAL);
-	    mValueText.setTextSize(32);
-	    params = new LinearLayout.LayoutParams(
-	        LinearLayout.LayoutParams.FILL_PARENT, 
-	        LinearLayout.LayoutParams.WRAP_CONTENT);
-	    layout.addView(mValueText, params);
+    Log.d("DeskClock", "text: " + mSuffix);
+  }
 
-	    mSeekBar = new SeekBar(mContext);
-	    mSeekBar.setOnSeekBarChangeListener(this);
-	    layout.addView(mSeekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+  @Override
+  protected View onCreateDialogView() {
+    LinearLayout.LayoutParams params;
+    LinearLayout layout = new LinearLayout(mContext);
+    layout.setOrientation(LinearLayout.VERTICAL);
+    layout.setPadding(6, 6, 6, 6);
 
-	    if (shouldPersist())
-	      mValue = getPersistedInt(mDefault);
+    mSplashText = new TextView(mContext);
+    if (mDialogMessage != null)
+      mSplashText.setText(mDialogMessage);
+    layout.addView(mSplashText);
 
-	    mSeekBar.setMax(mMax);
-	    mSeekBar.setProgress(mValue);
-	    return layout;
-	  }
-	  @Override 
-	  protected void onBindDialogView(View v) {
-	    super.onBindDialogView(v);
-	    mSeekBar.setMax(mMax);
-	    mSeekBar.setProgress(mValue);
-	  }
-	  @Override
-	  protected void onSetInitialValue(boolean restore, Object defaultValue)  
-	  {
-	    super.onSetInitialValue(restore, defaultValue);
-	    if (restore) 
-	      mValue = shouldPersist() ? getPersistedInt(mDefault) : 0;
-	    else 
-	      mValue = (Integer)defaultValue;
-	  }
+    mValueText = new TextView(mContext);
+    mValueText.setGravity(Gravity.CENTER_HORIZONTAL);
+    mValueText.setTextSize(32);
+    params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT);
+    layout.addView(mValueText, params);
 
-	  public void onProgressChanged(SeekBar seek, int value, boolean fromTouch)
-	  {
-	    String t = String.valueOf(value);
-	    mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
-	    if (shouldPersist())
-	      persistInt(value);
-	    callChangeListener(new Integer(value));
-	  }
-	  public void onStartTrackingTouch(SeekBar seek) {}
-	  public void onStopTrackingTouch(SeekBar seek) {}
+    mSeekBar = new SeekBar(mContext);
+    mSeekBar.setOnSeekBarChangeListener(this);
+    layout.addView(mSeekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT));
 
-	  public void setMax(int max) { mMax = max; }
-	  public int getMax() { return mMax; }
+    if (shouldPersist())
+      mValue = getPersistedInt(mDefault);
 
-	  public void setProgress(int progress) { 
-	    mValue = progress;
-	    if (mSeekBar != null)
-	      mSeekBar.setProgress(progress); 
-	  }
-	  public int getProgress() { return mValue; }
+    mSeekBar.setMax(mMax);
+    mSeekBar.setProgress(mValue);
+    return layout;
+  }
+
+  @Override
+  protected void onBindDialogView(View v) {
+    super.onBindDialogView(v);
+    mSeekBar.setMax(mMax);
+    mSeekBar.setProgress(mValue);
+  }
+
+  @Override
+  protected void onSetInitialValue(boolean restore, Object defaultValue) {
+    super.onSetInitialValue(restore, defaultValue);
+    if (restore)
+      mValue = shouldPersist() ? getPersistedInt(mDefault) : 0;
+    else
+      mValue = (Integer) defaultValue;
+  }
+
+  public void onProgressChanged(SeekBar seek, int value, boolean fromTouch) {
+    String t = String.valueOf(value);
+    mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
+    if (shouldPersist())
+      persistInt(value);
+    callChangeListener(new Integer(value));
+  }
+
+  public void onStartTrackingTouch(SeekBar seek) {}
+
+  public void onStopTrackingTouch(SeekBar seek) {}
+
+  public void setMax(int max) {
+    mMax = max;
+  }
+
+  public int getMax() {
+    return mMax;
+  }
+
+  public void setProgress(int progress) {
+    mValue = progress;
+    if (mSeekBar != null)
+      mSeekBar.setProgress(progress);
+  }
+
+  public int getProgress() {
+    return mValue;
+  }
 
 }

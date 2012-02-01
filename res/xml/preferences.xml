@@ -26,7 +26,9 @@ limitations under the License.
       android:title="@string/pref_title_keep_screen_on"
       android:summary="@string/pref_summary_keep_screen_on"
       android:dialogTitle="@string/pref_dialog_title_keep_screen_on"
-      android:defaultValue="" android:entryValues="@array/pref_values_keep_screen_on" android:entries="@array/pref_options_keep_screen_on"/>
+      android:defaultValue="@string/pref_default_keep_screen_on" 
+      android:entryValues="@array/pref_values_keep_screen_on" 
+      android:entries="@array/pref_options_keep_screen_on"/>
       
     <ListPreference
       android:key="pref_screen_orientation"
@@ -40,46 +42,55 @@ limitations under the License.
     <CheckBoxPreference
       android:key="pref_military_time"
       android:title="@string/pref_title_military_time" 
-      android:summary="@string/pref_summary_military_time" />
+      android:summary="@string/pref_summary_military_time"
+      android:defaultValue="@string/pref_default_military_time" />
       
     <CheckBoxPreference
       android:key="pref_leading_zero"
       android:title="@string/pref_title_leading_zero"
-      android:summary="@string/pref_summary_leading_zero" />
+      android:summary="@string/pref_summary_leading_zero"
+      android:defaultValue="@string/pref_default_leading_zero" />
       
     <CheckBoxPreference
       android:key="pref_meridiem"
       android:title="@string/pref_title_meridiem"
-      android:summary="@string/pref_summary_meridiem" />
+      android:summary="@string/pref_summary_meridiem"
+      android:defaultValue="@string/pref_default_meridiem" />
       
     <CheckBoxPreference
       android:key="pref_show_seconds"
-      android:title="@string/pref_title_show_seconds" />
+      android:title="@string/pref_title_show_seconds"
+      android:defaultValue="@string/pref_default_show_seconds" />
       
     <CheckBoxPreference
       android:key="pref_screensaver"
       android:title="@string/pref_title_screensaver"
-      android:summary="@string/pref_summary_screensaver" />
+      android:summary="@string/pref_summary_screensaver"
+      android:defaultValue="@string/pref_default_screensaver" />
 
     <CheckBoxPreference
       android:key="pref_blink_seconds"
       android:title="@string/pref_title_blink_seconds" 
-      android:summary="@string/pref_summary_blink_seconds" />
+      android:summary="@string/pref_summary_blink_seconds"
+      android:defaultValue="@string/pref_default_blink_seconds" />
       
     <PreferenceScreen
       android:key="pref_color"
-      android:title="@string/pref_title_color" />
+      android:title="@string/pref_title_color"
+      android:summary="@string/pref_summary_color" />
       
     <PreferenceScreen
       android:key="pref_background_color" 
-      android:title="@string/pref_title_background_color"/>
+      android:title="@string/pref_title_background_color" />
       
     <ListPreference
       android:key="pref_font"
       android:title="@string/pref_title_font"
       android:summary="@string/pref_summary_font"
       android:dialogTitle="@string/pref_dialog_title_font"
-      android:defaultValue="" android:entryValues="@array/pref_values_font" android:entries="@array/pref_options_font"/>
+      android:defaultValue="@string/pref_default_font" 
+      android:entryValues="@array/pref_values_font" 
+      android:entries="@array/pref_options_font"/>
     
     <com.slushpupie.deskclock.SeekBarPreference
       android:key="pref_scale"
