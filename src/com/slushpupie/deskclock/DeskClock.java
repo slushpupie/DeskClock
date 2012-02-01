@@ -149,8 +149,7 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.main);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		layout = (LinearLayout) findViewById(R.id.layout);
 		display = (DisplayView) findViewById(R.id.display);
@@ -381,23 +380,45 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				 if(keepOn == 1) {
 					wl = pm.newWakeLock(
 						PowerManager.SCREEN_DIM_WAKE_LOCK, "DeskClock");
-					
+
 					Window window = getWindow();
+
 					LayoutParams layoutParams = window.getAttributes();
 					try {
 						Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-						buttonBrightness.set(layoutParams, 0);
+						buttonBrightness.set(layoutParams, 0.0f);
+						Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
+						screenBrightness.set(layoutParams, 0.1f);
 					} catch (NoSuchFieldException e) {
-						
+
 					} catch (IllegalAccessException e) {
-						
+
 					}
 					window.setAttributes(layoutParams);
-					
+					window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+					window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 					Log.d(LOG_TAG,"Using DIM wakelock");
 				} else if(keepOn == 2) {
 					wl = pm.newWakeLock(
 						PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "DeskCLock");
+
+					Window window = getWindow();
+
+					LayoutParams layoutParams = window.getAttributes();
+					try {
+						Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
+						buttonBrightness.set(layoutParams, -1.0f);
+						Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
+						screenBrightness.set(layoutParams, -1.0f);
+					} catch (NoSuchFieldException e) {
+
+					} catch (IllegalAccessException e) {
+
+					}
+					window.setAttributes(layoutParams);
+					window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+					window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
 					Log.d(LOG_TAG,"Using BRIGHT wakelock");
 				} else {
 					Log.e(LOG_TAG,"Unknown wakelock value!");
@@ -412,6 +433,22 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 				wl.release();
 				wl = null;
 			}
+			Window window = getWindow();
+
+			LayoutParams layoutParams = window.getAttributes();
+			try {
+				Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
+				buttonBrightness.set(layoutParams, -1.0f);
+				Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
+				screenBrightness.set(layoutParams, -1.0f);
+			} catch (NoSuchFieldException e) {
+
+			} catch (IllegalAccessException e) {
+
+			}
+			window.setAttributes(layoutParams);
+			window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 		}
 
 	}
@@ -493,7 +530,6 @@ public class DeskClock extends Activity implements SharedPreferences.OnSharedPre
 		}
 
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR, 7);
 
 		char colon = ':';
 		if(prefsBlinkColon && cal.get(Calendar.SECOND) % 2 == 0) {
