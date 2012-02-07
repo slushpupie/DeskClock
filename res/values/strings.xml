@@ -45,6 +45,7 @@ limitations under the License.
     
     <string name="pref_screen_brightness">Screen Brightness</string>
     <string name="pref_summary_screen_brightness">Manually set the screen brightness</string>
+    <string name="pref_summary_en_screen_brightness">Set to </string>
     <string name="pref_title_screen_brightness">Screen Brightness</string>
     <string name="pref_dialog_message_screen_brightness">Screen Brightness</string>
     <string name="pref_text_screen_brightness">&#37;</string>
@@ -52,29 +53,30 @@ limitations under the License.
     
     <string name="pref_button_brightness">Button Brightness</string>
     <string name="pref_summary_button_brightness">Manually set the button brightness</string>
+    <string name="pref_summary_en_button_brightness">Set to </string>
     <string name="pref_title_button_brightness">Button Brightness</string>
     <string name="pref_dialog_message_button_brightness">Button Brightness</string>
     <string name="pref_text_button_brightness">&#37;</string>
     <string name="pref_default_button_brightness">50</string>
     <string name="pref_unavailable_button_brightness">Only available on Android 2.2+</string>
     
-    <string name="pref_title_military_time">12/24 Hour Time</string>
-    <string name="pref_summary_military_time">12 hour or military time</string>
+    <string name="pref_title_military_time">Use 24-hour format</string>
+    <string name="pref_summary_military_time">Military time</string>
     <string name="pref_default_military_time">0</string>
     
     <string name="pref_title_leading_zero">Leading 0 on Hour</string>
-    <string name="pref_summary_leading_zero">Show hour as 7 or 07 (always on for Military time)</string>
+    <string name="pref_summary_leading_zero">Show hour as 07 instead of 7</string>
     <string name="pref_default_leading_zero">0</string>
     
     <string name="pref_title_show_seconds">Show Seconds</string>
     <string name="pref_default_show_seconds">0</string>
     
     <string name="pref_title_blink_seconds">Blink seconds</string>
-    <string name="pref_summary_blink_seconds">Blink the colon each second.</string>
+    <string name="pref_summary_blink_seconds">Blink the colon each second</string>
     <string name="pref_default_blink_seconds">0</string>
     
-    <string name="pref_title_color">Clock Color</string>
-    <string name="pref_summary_color">Color of clock digits</string>
+    <string name="pref_title_color">Font Color</string>
+    <string name="pref_summary_color"></string>
     
     <string name="pref_title_background_color">Background Color</string>
     
@@ -122,6 +124,7 @@ limitations under the License.
 	<string name="pref_title_screen_orientation">Screen Orientation</string>
 	<string name="pref_summary_screen_orientation">Allow screen to rotate</string>
 	<string name="pref_dialog_title_screen_orientation">Screen Orientation</string>
+	<string name="pref_default_screen_orientation">auto</string>
 	<string-array name="pref_values_screen_orientation">
          <item>auto</item>
          <item>portrait</item>
@@ -134,7 +137,7 @@ limitations under the License.
      </string-array>
      
     <string name="pref_title_meridiem">Show AM/PM</string>
-    <string name="pref_summary_meridiem">Display the literal "AM" or "PM" in the time</string>
+    <string name="pref_summary_meridiem"></string>
     <string name="pref_default_meridiem">0</string>
     
     <string name="pref_title_screensaver">Screen Saver</string>
@@ -142,10 +145,10 @@ limitations under the License.
     <string name="pref_default_screensaver">0</string>
     
     <string name="pref_title_changelog">Show Changelog</string>
-    <string name="pref_summary_changelog">Display Changelog at startup</string>
+    <string name="pref_summary_changelog">Display Changelog at next startup</string>
     
     <string name="pref_title_scale">Scale Font</string>
-    <string name="pref_summary_scale">Make clock take up less than maximum size</string>
+    <string name="pref_summary_scale">Scaled to</string>
     <string name="pref_dialog_message_scale">Scale down the font</string>
     <string name="pref_text_scale">&#37;</string>
     

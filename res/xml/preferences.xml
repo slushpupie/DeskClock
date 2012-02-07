@@ -53,7 +53,7 @@ limitations under the License.
       android:title="@string/pref_title_screen_orientation"
       android:summary="@string/pref_summary_screen_orientation"
       android:dialogTitle="@string/pref_dialog_title_screen_orientation"
-      android:defaultValue="auto"
+      android:defaultValue="@string/pref_default_screen_orientation"
       android:entryValues="@array/pref_values_screen_orientation"
       android:entries="@array/pref_options_screen_orientation" />
       

@@ -34,6 +34,10 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
   SeekBarPreference mScreenBrightness;
   SeekBarPreference mButtonBrightness;
   CheckBoxPreference mLeadingZero;
+  ListPreference mScreenOrientation;
+  ListPreference mFont;
+  SeekBarPreference mScale;
+
   boolean showButtonBrightness = true;
 
   public void onCreate(Bundle savedInstance) {
@@ -46,6 +50,9 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
     mScreenBrightness = (SeekBarPreference) findPreference("pref_screen_brightness");
     mButtonBrightness = (SeekBarPreference) findPreference("pref_button_brightness");
     mLeadingZero = (CheckBoxPreference) findPreference("pref_leading_zero");
+    mScreenOrientation = (ListPreference) findPreference("pref_screen_orientation");
+    mFont = (ListPreference) findPreference("pref_font");
+    mScale = (SeekBarPreference) findPreference("pref_scale");
 
     try {
       // Can we even set the buttonBrightness?
@@ -81,19 +88,32 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
     super.onResume();
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+    mKeepScreenOn.setSummary(mKeepScreenOn.getEntry());
     String val = prefs.getString("pref_keep_screen_on",
         getString(R.string.pref_default_keep_screen_on));
 
     if ("manual".equals(val)) {
       mScreenBrightness.setEnabled(true);
-      if (showButtonBrightness)
+      mScreenBrightness.setSummary(getString(R.string.pref_summary_en_screen_brightness) + " "
+          + mScreenBrightness.getProgress() + "%");
+      if (showButtonBrightness) {
         mButtonBrightness.setEnabled(true);
-      else
+        mButtonBrightness.setSummary(getString(R.string.pref_summary_en_button_brightness) + " "
+            + mButtonBrightness.getProgress() + "%");
+      } else {
         mButtonBrightness.setEnabled(false);
+      }
     } else {
       mScreenBrightness.setEnabled(false);
       mButtonBrightness.setEnabled(false);
     }
+
+    mScreenOrientation.setSummary(mScreenOrientation.getEntry());
+
+    mFont.setSummary(getString(R.string.pref_summary_font) + ": " + mFont.getEntry());
+
+    mScale.setSummary(getString(R.string.pref_summary_scale) + " " + mScale.getProgress() + "%");
+
     prefs.registerOnSharedPreferenceChangeListener(this);
   }
 
@@ -109,14 +129,32 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
       String val = sharedPreferences.getString("pref_keep_screen_on",
           getString(R.string.pref_default_keep_screen_on));
       if ("manual".equals(val)) {
+        mKeepScreenOn
+            .setSummary(getResources().getStringArray(R.array.pref_options_keep_screen_on)[2]);
         mScreenBrightness.setEnabled(true);
-        if (showButtonBrightness)
+        mScreenBrightness.setSummary(getString(R.string.pref_summary_en_screen_brightness) + " "
+            + mScreenBrightness.getProgress() + "%");
+        if (showButtonBrightness) {
           mButtonBrightness.setEnabled(true);
-        else
+          mButtonBrightness.setSummary(getString(R.string.pref_summary_en_button_brightness) + " "
+              + mButtonBrightness.getProgress() + "%");
+        } else {
           mButtonBrightness.setEnabled(false);
+        }
       } else {
         mScreenBrightness.setEnabled(false);
         mButtonBrightness.setEnabled(false);
+        mScreenBrightness.setSummary(R.string.pref_summary_screen_brightness);
+        if (showButtonBrightness)
+          mButtonBrightness.setSummary(R.string.pref_summary_button_brightness);
+
+        if ("auto".equals(val)) {
+          mKeepScreenOn.setSummary(getResources().getStringArray(
+              R.array.pref_options_keep_screen_on)[1]);
+        } else {
+          mKeepScreenOn.setSummary(getResources().getStringArray(
+              R.array.pref_options_keep_screen_on)[0]);
+        }
       }
     }
 
@@ -128,6 +166,18 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
       } else {
         mLeadingZero.setEnabled(true);
       }
+    }
+
+    if (key.equals("pref_screen_orientation")) {
+      mScreenOrientation.setSummary(mScreenOrientation.getEntry());
+    }
+
+    if (key.equals("pref_font")) {
+      mFont.setSummary(getString(R.string.pref_summary_font) + ": " + mFont.getEntry());
+    }
+
+    if (key.equals("pref_scale")) {
+      mScale.setSummary(getString(R.string.pref_summary_scale) + " " + mScale.getProgress() + "%");
     }
   }
 
