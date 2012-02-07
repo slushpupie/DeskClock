@@ -17,20 +17,43 @@
 package com.slushpupie.deskclock;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 
-public class DeskClockPreferenceActivity extends PreferenceActivity {
+public class DeskClockPreferenceActivity extends PreferenceActivity implements
+    OnSharedPreferenceChangeListener {
+
+  ListPreference mKeepScreenOn;
+  SeekBarPreference mScreenBrightness;
+  SeekBarPreference mButtonBrightness;
+  CheckBoxPreference mLeadingZero;
+  boolean showButtonBrightness = true;
 
   public void onCreate(Bundle savedInstance) {
     super.onCreate(savedInstance);
     addPreferencesFromResource(R.xml.preferences);
 
     final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    mKeepScreenOn = (ListPreference) findPreference("pref_keep_screen_on");
+    mScreenBrightness = (SeekBarPreference) findPreference("pref_screen_brightness");
+    mButtonBrightness = (SeekBarPreference) findPreference("pref_button_brightness");
+    mLeadingZero = (CheckBoxPreference) findPreference("pref_leading_zero");
+
+    try {
+      // Can we even set the buttonBrightness?
+      getWindow().getAttributes().getClass().getField("buttonBrightness");
+    } catch (NoSuchFieldException e) {
+      showButtonBrightness = false;
+      mButtonBrightness.setSummary(R.string.pref_unavailable_button_brightness);
+    }
 
     Preference colorPref = findPreference("pref_color");
     final ColorPickerDialog clPicker = new ColorPickerDialog(this, prefs.getInt("pref_color",
@@ -51,6 +74,61 @@ public class DeskClockPreferenceActivity extends PreferenceActivity {
         return true;
       }
     });
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    String val = prefs.getString("pref_keep_screen_on",
+        getString(R.string.pref_default_keep_screen_on));
+
+    if ("manual".equals(val)) {
+      mScreenBrightness.setEnabled(true);
+      if (showButtonBrightness)
+        mButtonBrightness.setEnabled(true);
+      else
+        mButtonBrightness.setEnabled(false);
+    } else {
+      mScreenBrightness.setEnabled(false);
+      mButtonBrightness.setEnabled(false);
+    }
+    prefs.registerOnSharedPreferenceChangeListener(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(
+        this);
+  }
+
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    if (key.equals("pref_keep_screen_on")) {
+      String val = sharedPreferences.getString("pref_keep_screen_on",
+          getString(R.string.pref_default_keep_screen_on));
+      if ("manual".equals(val)) {
+        mScreenBrightness.setEnabled(true);
+        if (showButtonBrightness)
+          mButtonBrightness.setEnabled(true);
+        else
+          mButtonBrightness.setEnabled(false);
+      } else {
+        mScreenBrightness.setEnabled(false);
+        mButtonBrightness.setEnabled(false);
+      }
+    }
+
+    if (key.equals("pref_military_time")) {
+      boolean val = sharedPreferences.getBoolean("pref_military_time",
+          Boolean.valueOf(getString(R.string.pref_default_military_time)));
+      if (val) {
+        mLeadingZero.setEnabled(false);
+      } else {
+        mLeadingZero.setEnabled(true);
+      }
+    }
   }
 
   private class FontColorChangeListener implements ColorPickerDialog.OnColorSelectListener {

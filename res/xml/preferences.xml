@@ -29,7 +29,25 @@ limitations under the License.
       android:defaultValue="@string/pref_default_keep_screen_on" 
       android:entryValues="@array/pref_values_keep_screen_on" 
       android:entries="@array/pref_options_keep_screen_on"/>
-      
+     
+    <com.slushpupie.deskclock.SeekBarPreference
+      android:key="pref_screen_brightness"
+      android:title="@string/pref_title_screen_brightness"
+      android:summary="@string/pref_summary_screen_brightness"
+      android:dialogMessage="@string/pref_dialog_message_screen_brightness"
+      android:text="@string/pref_text_screen_brightness"
+      android:defaultValue="50"
+      android:max="100" />
+
+    <com.slushpupie.deskclock.SeekBarPreference
+      android:key="pref_button_brightness"
+      android:title="@string/pref_title_button_brightness"
+      android:summary="@string/pref_summary_button_brightness"
+      android:dialogMessage="@string/pref_dialog_message_button_brightness"
+      android:text="@string/pref_text_button_brightness"
+      android:defaultValue="50"
+      android:max="100" />
+
     <ListPreference
       android:key="pref_screen_orientation"
       android:title="@string/pref_title_screen_orientation"

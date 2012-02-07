@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -34,7 +35,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
@@ -64,6 +64,7 @@ public class DeskClock extends Activity implements
   private static final String LOG_TAG = "DeskClock";
   private static char digitcharset[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
   private static char lettercharset[] = { 'A', 'P' };
+  private static int PREF_VERSION = 2;
 
   // for pinch-zoom
   private static int NONE = 0;
@@ -93,6 +94,8 @@ public class DeskClock extends Activity implements
 
   // backed by preferences
   private int prefsKeepSreenOn = 0;
+  private int prefsScreenBrightness = 50;
+  private int prefsButtonBrightness = 50;
   private boolean prefsLeadingZero = false;
   private boolean prefsMilitaryTime = false;
   private boolean prefsShowMeridiem = false;
@@ -207,7 +210,7 @@ public class DeskClock extends Activity implements
   /** Called when the activity is no longer visible. */
   @Override
   public void onStop() {
-    setScreenLock(0); // release any wakelocks
+    setScreenLock(0, 0, 0);
     unregisterReceiver(intentReceiver);
     isRunning = false;
     super.onStop();
@@ -334,23 +337,34 @@ public class DeskClock extends Activity implements
     Log.d(LOG_TAG, "loading preferences");
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+    int prefVersion = prefs.getInt("pref_version", 1);
+    if (prefVersion != PREF_VERSION) {
+      upgradePrefs(prefs);
+    }
+
     lastChangelog = prefs.getString("last_changelog", "");
 
-    try {
-      prefsKeepSreenOn = Integer.valueOf(prefs.getString("pref_keep_screen_on", "0"));
-    } catch (NumberFormatException e) {
+    String kso = prefs.getString("pref_keep_screen_on", "no");
+    if ("auto".equals(kso))
+      prefsKeepSreenOn = 1;
+    else if ("manual".equals(kso))
+      prefsKeepSreenOn = 2;
+    else
       prefsKeepSreenOn = 0;
-    }
-    setScreenLock(prefsKeepSreenOn);
+
+    prefsScreenBrightness = prefs.getInt("pref_screen_brightness", 50);
+    prefsButtonBrightness = prefs.getInt("pref_button_brightness", 50);
+
+    setScreenLock(prefsKeepSreenOn, prefsScreenBrightness, prefsButtonBrightness);
 
     String pso = prefs.getString("pref_screen_orientation", "auto");
-    if ("portrait".equals(pso)) {
+    if ("portrait".equals(pso))
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    } else if ("landscape".equals(pso)) {
+    else if ("landscape".equals(pso))
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-    } else {
+    else
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-    }
+
     setRequestedOrientation(prefsScreenOrientation);
 
     prefsMilitaryTime = prefs.getBoolean("pref_military_time", false);
@@ -413,67 +427,92 @@ public class DeskClock extends Activity implements
 
   }
 
-  private void setScreenLock(int keepOn) {
+  private void upgradePrefs(SharedPreferences prefs) {
+    Editor editor = prefs.edit();
+    switch (prefs.getInt("pref_version", 1)) {
+      case 1:
+        Log.i(LOG_TAG, "Upgrading preferences from version 1 to version 2");
+        String keepScreenOn = prefs.getString("pref_keep_screen_on", "");
+        String newKeepScreenOn = "no";
+        int screenBrightness = 50;
+        int buttonBrightness = 50;
+        if ("1".equals(keepScreenOn)) { // old 'dim' setting
+          newKeepScreenOn = "manual";
+          screenBrightness = 0;
+          buttonBrightness = 0;
+        } else if ("2".equals(keepScreenOn)) { // old 'bright' setting
+          newKeepScreenOn = "manual";
+          screenBrightness = 100;
+          buttonBrightness = 100;
+        }
+        editor.putString("pref_keep_screen_on", newKeepScreenOn);
+        editor.putInt("pref_screen_brightness", screenBrightness);
+        editor.putInt("pref_button_brightness", buttonBrightness);
+        editor.putInt("pref_version", 2);
+        editor.commit();
+
+      case 2:
+        Log.i(LOG_TAG, "Upgrade complete.");
+        return;
+      default:
+        Log.e(LOG_TAG, "Unknown preferences version");
+    }
+  }
+
+  private void setScreenLock(int keepOn, int screenBrightness, int buttonBrightness) {
+    Window window = getWindow();
+
+    LayoutParams layoutParams = window.getAttributes();
+    Field fButtonBrightness = null;
+    try {
+      fButtonBrightness = layoutParams.getClass().getField("buttonBrightness");
+    } catch (NoSuchFieldException e) {
+
+    }
+
     if (keepOn > 0) {
+
       if (keepOn == 1) {
-
-        Window window = getWindow();
-
-        LayoutParams layoutParams = window.getAttributes();
+        // Auto-brightness
+        layoutParams.screenBrightness = -1.0f;
         try {
-          Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-          buttonBrightness.set(layoutParams, 0.0f);
-          Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
-          screenBrightness.set(layoutParams, 0.1f);
-        } catch (NoSuchFieldException e) {
-
+          if (fButtonBrightness != null)
+            fButtonBrightness.set(layoutParams, -1.0f);
         } catch (IllegalAccessException e) {
 
         }
-        window.setAttributes(layoutParams);
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        Log.d(LOG_TAG, "Using DIM wakelock");
       } else if (keepOn == 2) {
+        // Manual brightness
 
-        Window window = getWindow();
-
-        LayoutParams layoutParams = window.getAttributes();
+        // Setting to 0 turns the screen off, so dont allow that
+        if (prefsScreenBrightness <= 100 && prefsScreenBrightness > 0)
+          layoutParams.screenBrightness = (prefsScreenBrightness / 100.0f);
+        if (prefsScreenBrightness < 1)
+          layoutParams.screenBrightness = 0.01f;
         try {
-          Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-          buttonBrightness.set(layoutParams, -1.0f);
-          Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
-          screenBrightness.set(layoutParams, -1.0f);
-        } catch (NoSuchFieldException e) {
-
+          if (fButtonBrightness != null && prefsButtonBrightness <= 100
+              && prefsButtonBrightness >= 0)
+            fButtonBrightness.set(layoutParams, (prefsButtonBrightness / 100.0f));
         } catch (IllegalAccessException e) {
 
         }
-        window.setAttributes(layoutParams);
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
-        Log.d(LOG_TAG, "Using BRIGHT wakelock");
       } else {
-        Log.e(LOG_TAG, "Unknown wakelock value!");
+        Log.e(LOG_TAG, "Unknown keepOn value!");
         return;
       }
-
+      window.setAttributes(layoutParams);
+      window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     } else {
+      // Disable KEEP_SCREEN_ON
 
-      Window window = getWindow();
-
-      LayoutParams layoutParams = window.getAttributes();
       try {
-        Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-        buttonBrightness.set(layoutParams, -1.0f);
-        Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
-        screenBrightness.set(layoutParams, -1.0f);
-      } catch (NoSuchFieldException e) {
-
+        if (fButtonBrightness != null)
+          fButtonBrightness.set(layoutParams, -1.0f);
       } catch (IllegalAccessException e) {
 
       }
+      layoutParams.screenBrightness = -1.0f;
       window.setAttributes(layoutParams);
       window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
       window.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);

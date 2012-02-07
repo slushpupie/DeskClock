@@ -31,17 +31,32 @@ limitations under the License.
     <string name="pref_title_keep_screen_on">Keep Screen On</string>
     <string name="pref_summary_keep_screen_on">Prevent display from sleeping</string>
     <string name="pref_dialog_title_keep_screen_on">Keep Screen On</string>
-    <string name="pref_default_keep_screen_on">0</string>
+    <string name="pref_default_keep_screen_on">no</string>
     <string-array name="pref_options_keep_screen_on">
         <item>Off</item>
-        <item>On - dim</item>
-        <item>On - bright</item>
+        <item>On - auto brightness</item>
+        <item>On - manual brightness</item>
     </string-array>
     <string-array name="pref_values_keep_screen_on">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
+        <item>no</item>
+        <item>auto</item>
+        <item>manual</item>
     </string-array>
+    
+    <string name="pref_screen_brightness">Screen Brightness</string>
+    <string name="pref_summary_screen_brightness">Manually set the screen brightness</string>
+    <string name="pref_title_screen_brightness">Screen Brightness</string>
+    <string name="pref_dialog_message_screen_brightness">Screen Brightness</string>
+    <string name="pref_text_screen_brightness">&#37;</string>
+    <string name="pref_default_screen_brightness">50</string>
+    
+    <string name="pref_button_brightness">Button Brightness</string>
+    <string name="pref_summary_button_brightness">Manually set the button brightness</string>
+    <string name="pref_title_button_brightness">Button Brightness</string>
+    <string name="pref_dialog_message_button_brightness">Button Brightness</string>
+    <string name="pref_text_button_brightness">&#37;</string>
+    <string name="pref_default_button_brightness">50</string>
+    <string name="pref_unavailable_button_brightness">Only available on Android 2.2+</string>
     
     <string name="pref_title_military_time">12/24 Hour Time</string>
     <string name="pref_summary_military_time">12 hour or military time</string>
