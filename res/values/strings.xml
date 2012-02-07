@@ -16,9 +16,9 @@ limitations under the License.
 -->
 <resources>
     <string name="app_name">Desk Clock</string>
-    <string name="app_version">1.5</string>
+    <string name="app_version">1.6</string>
     <string name="changeLogTitle">Recent Changes</string>
-    <string name="changeLog">* Improved font handling\n* New Fonts\n* New color picker\n* Improved wake-lock mechanism\n* Donate version <a href="http://market.android.com/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
+    <string name="changeLog">* Improved wake-lock mechanism again\n* Ability to set screen/button brightness\n* Improved preferences screen\n* Donate version <a href="http://market.android.com/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
     
     <string name="settings_bg_color_confirm">Confirm</string>
