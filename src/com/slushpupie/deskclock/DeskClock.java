@@ -79,7 +79,6 @@ public class DeskClock extends Activity implements
 
   private Typeface[] fonts;
 
-  private PowerManager.WakeLock wl = null;
   private boolean isRunning = false;
   private RefreshHandler handler = new RefreshHandler();
   private final BroadcastReceiver intentReceiver;
@@ -212,16 +211,6 @@ public class DeskClock extends Activity implements
     unregisterReceiver(intentReceiver);
     isRunning = false;
     super.onStop();
-  }
-
-  /** Called before the activity is destroyed. */
-  @Override
-  public void onDestroy() {
-    if (wl != null) {
-      wl.release();
-      wl = null;
-    }
-    super.onDestroy();
   }
 
   /** Called on configuration changes, such as screen rotate */
@@ -426,65 +415,52 @@ public class DeskClock extends Activity implements
 
   private void setScreenLock(int keepOn) {
     if (keepOn > 0) {
-      if (wl == null) {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        /*
-         * Could use SCREEN_DIM_WAKE_LOCK SCREEN_BRIGHT_WAKE_LOCK
-         */
-        if (keepOn == 1) {
-          wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "DeskClock");
+      if (keepOn == 1) {
 
-          Window window = getWindow();
+        Window window = getWindow();
 
-          LayoutParams layoutParams = window.getAttributes();
-          try {
-            Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-            buttonBrightness.set(layoutParams, 0.0f);
-            Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
-            screenBrightness.set(layoutParams, 0.1f);
-          } catch (NoSuchFieldException e) {
+        LayoutParams layoutParams = window.getAttributes();
+        try {
+          Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
+          buttonBrightness.set(layoutParams, 0.0f);
+          Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
+          screenBrightness.set(layoutParams, 0.1f);
+        } catch (NoSuchFieldException e) {
 
-          } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
 
-          }
-          window.setAttributes(layoutParams);
-          window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-          window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-          Log.d(LOG_TAG, "Using DIM wakelock");
-        } else if (keepOn == 2) {
-          wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "DeskCLock");
-
-          Window window = getWindow();
-
-          LayoutParams layoutParams = window.getAttributes();
-          try {
-            Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
-            buttonBrightness.set(layoutParams, -1.0f);
-            Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
-            screenBrightness.set(layoutParams, -1.0f);
-          } catch (NoSuchFieldException e) {
-
-          } catch (IllegalAccessException e) {
-
-          }
-          window.setAttributes(layoutParams);
-          window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-          window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
-          Log.d(LOG_TAG, "Using BRIGHT wakelock");
-        } else {
-          Log.e(LOG_TAG, "Unknown wakelock value!");
-          return;
         }
-        wl.acquire();
-        Log.d(LOG_TAG, "WakeLock acquired");
+        window.setAttributes(layoutParams);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        Log.d(LOG_TAG, "Using DIM wakelock");
+      } else if (keepOn == 2) {
+
+        Window window = getWindow();
+
+        LayoutParams layoutParams = window.getAttributes();
+        try {
+          Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
+          buttonBrightness.set(layoutParams, -1.0f);
+          Field screenBrightness = layoutParams.getClass().getField("screenBrightness");
+          screenBrightness.set(layoutParams, -1.0f);
+        } catch (NoSuchFieldException e) {
+
+        } catch (IllegalAccessException e) {
+
+        }
+        window.setAttributes(layoutParams);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        Log.d(LOG_TAG, "Using BRIGHT wakelock");
+      } else {
+        Log.e(LOG_TAG, "Unknown wakelock value!");
+        return;
       }
+
     } else {
-      if (wl != null) {
-        Log.d(LOG_TAG, "WakeLock released");
-        wl.release();
-        wl = null;
-      }
+
       Window window = getWindow();
 
       LayoutParams layoutParams = window.getAttributes();
