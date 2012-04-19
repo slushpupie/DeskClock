@@ -83,7 +83,7 @@ limitations under the License.
     <string name="pref_title_font">Font</string>
     <string name="pref_summary_font">Clock Face Font</string>
     <string name="pref_dialog_title_font">Choose Font</string>
-    <string name="pref_default_font">14</string>
+    <string name="pref_default_font">16</string>
     <string-array name="pref_options_font">
         <item>Roboto</item>
     	<item>Abduction 2000</item>
