@@ -32,6 +32,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -166,6 +167,8 @@ public class DeskClock extends Activity implements
       }
     });
     display.setOnTouchListener(this);
+    
+    
 
     fonts = new Typeface[17];
     fonts[0] = Typeface.DEFAULT_BOLD;
@@ -537,6 +540,10 @@ public class DeskClock extends Activity implements
     display.setBackgroundColor(prefsBackgroundColor);
     display.setColor(prefsFontColor);
     display.setScreenSaver(prefsScreenSaver);
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      display.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 
     Log.d(LOG_TAG, "display configured");
     needsResizing = true;
