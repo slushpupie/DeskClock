@@ -108,6 +108,7 @@ public class DeskClock extends Activity implements
   private boolean prefsScreenSaver = false;
   private String lastChangelog = "";
   private int prefsScale = 100;
+  private boolean prefsIgnoreUndock = false;
 
   public DeskClock() {
     super();
@@ -130,7 +131,10 @@ public class DeskClock extends Activity implements
           switch (dockState) {
             case Intent.EXTRA_DOCK_STATE_UNDOCKED:
               Log.d(LOG_TAG, "received EXTRA_DOCK_STATE_UNDOCKED");
-              finish();
+              if(prefsIgnoreUndock)
+                Log.d(LOG_TAG, "Ignoring...");
+              else
+                finish();
               break;
             case Intent.EXTRA_DOCK_STATE_DESK:
               Log.d(LOG_TAG, "received EXTRA_DOCK_STATE_DESK");
@@ -424,6 +428,8 @@ public class DeskClock extends Activity implements
       prefsScale = prefs.getInt("pref_scale", 100);
       needsResizing = true;
     }
+    
+    prefsIgnoreUndock = prefs.getBoolean("pref_ignore_undock", false); 
 
   }
 

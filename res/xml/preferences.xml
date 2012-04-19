@@ -29,6 +29,12 @@ limitations under the License.
       android:defaultValue="@string/pref_default_keep_screen_on" 
       android:entryValues="@array/pref_values_keep_screen_on" 
       android:entries="@array/pref_options_keep_screen_on"/>
+    
+    <CheckBoxPreference 
+      android:key="pref_ignore_undock"
+      android:title="@string/pref_title_ignore_undock"
+      android:summary="@string/pref_summary_ignore_undock"
+      android:defaultValue="@string/pref_default_ignore_undock" />
      
     <com.slushpupie.deskclock.SeekBarPreference
       android:key="pref_screen_brightness"
@@ -123,5 +129,6 @@ limitations under the License.
       android:key="pref_changelog"
       android:title="@string/pref_title_changelog"
       android:summary="@string/pref_summary_changelog" />
+    
         
 </PreferenceScreen>

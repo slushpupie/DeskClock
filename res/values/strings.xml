@@ -152,4 +152,8 @@ limitations under the License.
     <string name="pref_dialog_message_scale">Scale down the font</string>
     <string name="pref_text_scale">&#37;</string>
     
+    <string name="pref_title_ignore_undock">Ignore Undocking</string>
+    <string name="pref_summary_ignore_undock">If DeskClock keeps closing on you, try checking this box</string>
+    <string name="pref_default_ignore_undock">0</string>
+    
 </resources>
