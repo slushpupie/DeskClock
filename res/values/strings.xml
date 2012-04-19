@@ -85,6 +85,7 @@ limitations under the License.
     <string name="pref_dialog_title_font">Choose Font</string>
     <string name="pref_default_font">14</string>
     <string-array name="pref_options_font">
+        <item>Roboto</item>
     	<item>Abduction 2000</item>
     	<item>DS Point</item>
     	<item>DS Terminal</item>
@@ -103,6 +104,7 @@ limitations under the License.
     	<item>System Monospace</item>
     </string-array>
     <string-array name="pref_values_font">
+        <item>16</item>
 		<item>4</item>
 		<item>5</item>
 		<item>6</item>

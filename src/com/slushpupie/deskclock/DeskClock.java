@@ -167,7 +167,7 @@ public class DeskClock extends Activity implements
     });
     display.setOnTouchListener(this);
 
-    fonts = new Typeface[16];
+    fonts = new Typeface[17];
     fonts[0] = Typeface.DEFAULT_BOLD;
     fonts[1] = Typeface.SANS_SERIF;
     fonts[2] = Typeface.SERIF;
@@ -184,6 +184,7 @@ public class DeskClock extends Activity implements
     fonts[13] = Typeface.createFromAsset(getAssets(), "fonts/DisplayDots.ttf");
     fonts[14] = Typeface.createFromAsset(getAssets(), "fonts/digi.otf");
     fonts[15] = Typeface.createFromAsset(getAssets(), "fonts/GentiumBinary.ttf");
+    fonts[16] = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
 
     loadPrefs();
 
