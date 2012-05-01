@@ -31,10 +31,10 @@ limitations under the License.
       android:entries="@array/pref_options_keep_screen_on"/>
     
     <CheckBoxPreference 
-      android:key="pref_ignore_undock"
-      android:title="@string/pref_title_ignore_undock"
-      android:summary="@string/pref_summary_ignore_undock"
-      android:defaultValue="@string/pref_default_ignore_undock" />
+      android:key="pref_undock_exit"
+      android:title="@string/pref_title_undock_exit"
+      android:summary="@string/pref_summary_undock_exit"
+      android:defaultValue="@string/pref_default_undock_exit" />
      
     <com.slushpupie.deskclock.SeekBarPreference
       android:key="pref_screen_brightness"

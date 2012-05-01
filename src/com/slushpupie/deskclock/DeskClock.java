@@ -110,7 +110,7 @@ public class DeskClock extends FragmentActivity implements
   private boolean prefsScreenSaver = false;
   private String lastChangelog = "";
   private int prefsScale = 100;
-  private boolean prefsIgnoreUndock = false;
+  private boolean prefsUndockExit = false;
 
   private static class ChangelogDialog extends DialogFragment {
     static ChangelogDialog newInstance() {
@@ -174,10 +174,10 @@ public class DeskClock extends FragmentActivity implements
           switch (dockState) {
             case Intent.EXTRA_DOCK_STATE_UNDOCKED:
               Log.d(LOG_TAG, "received EXTRA_DOCK_STATE_UNDOCKED");
-              if(prefsIgnoreUndock)
-                Log.d(LOG_TAG, "Ignoring...");
-              else
+              if(prefsUndockExit)
                 finish();
+              else
+                Log.d(LOG_TAG, "Ignoring...");
               break;
             case Intent.EXTRA_DOCK_STATE_DESK:
               Log.d(LOG_TAG, "received EXTRA_DOCK_STATE_DESK");
@@ -479,7 +479,10 @@ public class DeskClock extends FragmentActivity implements
       needsResizing = true;
     }
     
-    prefsIgnoreUndock = prefs.getBoolean("pref_ignore_undock", false); 
+    
+    prefsUndockExit = prefs.getBoolean("pref_undock_exit", false);
+    //in case anyone has this preference still
+    prefsUndockExit = prefs.getBoolean("pref_ignore_undock", true);
 
   }
 
