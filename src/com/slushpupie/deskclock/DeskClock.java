@@ -111,38 +111,6 @@ public class DeskClock extends FragmentActivity implements
   private String lastChangelog = "";
   private int prefsScale = 100;
   private boolean prefsUndockExit = false;
-
-  private static class ChangelogDialog extends DialogFragment {
-    static ChangelogDialog newInstance() {
-      ChangelogDialog frag = new ChangelogDialog();
-      return frag;
-    }
-    
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      // Standard AlertDialog does not support HTML-style links.
-      // So rebuild the ScrollView->TextView with the appropriate
-      // settings and set the view directly.
-      TextView tv = new TextView(getActivity());
-      tv.setPadding(5, 5, 5, 5);
-      tv.setLinksClickable(true);
-      tv.setMovementMethod(LinkMovementMethod.getInstance());
-      tv.setText(R.string.changeLog);
-      tv.setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
-      ScrollView sv = new ScrollView(getActivity());
-      sv.setPadding(14, 2, 10, 12);
-      sv.addView(tv);
-      builder.setView(sv).setCancelable(false).setTitle(R.string.changeLogTitle)
-          .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-              ((DeskClock)getActivity()).acknoledgeChangelog();
-            }
-          });
-      return builder.create();
-    }
-    
-  }
   
   public void acknoledgeChangelog() {
     SharedPreferences prefs = PreferenceManager
