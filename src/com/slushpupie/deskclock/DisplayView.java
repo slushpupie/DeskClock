@@ -187,7 +187,6 @@ public class DisplayView extends View {
 
     float horzDelta = (wmSum - wSum) / 2;
     canvas.drawText(time, (horz * hF) + horzDelta, vert * vF + boundingBox1.height(), paint);
-    invalidate();
     return;
   }
 

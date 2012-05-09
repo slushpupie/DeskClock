@@ -152,6 +152,9 @@ public class DeskClock extends FragmentActivity implements
               break;
           }
         }
+        if (Intent.ACTION_TIME_TICK.equals(action)) {
+          updateTime();
+        }
       }
     };
   }
@@ -221,6 +224,7 @@ public class DeskClock extends FragmentActivity implements
 
     IntentFilter filter = new IntentFilter();
     filter.addAction(Intent.ACTION_DOCK_EVENT);
+    filter.addAction(Intent.ACTION_TIME_TICK);
     registerReceiver(intentReceiver, filter);
 
     isRunning = true;
@@ -358,18 +362,21 @@ public class DeskClock extends FragmentActivity implements
   private void loadPrefs() {
     Log.d(LOG_TAG, "loading preferences");
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    boolean b = false;
+    int i = 0;
+    String s = null;
 
-    int prefVersion = prefs.getInt("pref_version", 1);
-    if (prefVersion != PREF_VERSION) {
+    i = prefs.getInt("pref_version", 1);
+    if (i != PREF_VERSION) {
       upgradePrefs(prefs);
     }
 
     lastChangelog = prefs.getString("last_changelog", "");
 
-    String kso = prefs.getString("pref_keep_screen_on", "no");
-    if ("auto".equals(kso))
+    s = prefs.getString("pref_keep_screen_on", "no");
+    if ("auto".equals(s))
       prefsKeepSreenOn = 1;
-    else if ("manual".equals(kso))
+    else if ("manual".equals(s))
       prefsKeepSreenOn = 2;
     else
       prefsKeepSreenOn = 0;
@@ -379,23 +386,31 @@ public class DeskClock extends FragmentActivity implements
 
     setScreenLock(prefsKeepSreenOn, prefsScreenBrightness, prefsButtonBrightness);
 
-    String pso = prefs.getString("pref_screen_orientation", "auto");
-    if ("portrait".equals(pso))
+    s = prefs.getString("pref_screen_orientation", "auto");
+    if ("portrait".equals(s))
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    else if ("landscape".equals(pso))
+    else if ("landscape".equals(s))
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
     else
       prefsScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
     setRequestedOrientation(prefsScreenOrientation);
 
-    prefsMilitaryTime = prefs.getBoolean("pref_military_time", false);
+    b = prefs.getBoolean("pref_military_time", false);
+    if (b != prefsMilitaryTime) {
+      prefsMilitaryTime = b;
+      needsResizing = true;
+    }
 
-    prefsLeadingZero = prefs.getBoolean("pref_leading_zero", false);
+    b = prefs.getBoolean("pref_leading_zero", false);
+    if (b != prefsLeadingZero) {
+      prefsLeadingZero = b;
+      needsResizing = true;
+    }
 
-    boolean showMeridiem = prefs.getBoolean("pref_meridiem", false);
-    if (showMeridiem != prefsShowMeridiem) {
-      prefsShowMeridiem = showMeridiem;
+    b = prefs.getBoolean("pref_meridiem", false);
+    if (b != prefsShowMeridiem) {
+      prefsShowMeridiem = b;
       needsResizing = true;
     }
 
@@ -413,18 +428,18 @@ public class DeskClock extends FragmentActivity implements
     }
     layout.setBackgroundColor(prefsBackgroundColor);
 
-    boolean showSeconds = prefs.getBoolean("pref_show_seconds", false);
-    if (prefsShowSeconds != showSeconds) {
-      prefsShowSeconds = showSeconds;
+    b = prefs.getBoolean("pref_show_seconds", false);
+    if (b != prefsShowSeconds) {
+      prefsShowSeconds = b;
       needsResizing = true;
     }
 
     prefsBlinkColon = prefs.getBoolean("pref_blink_seconds", false);
 
     try {
-      int n = Integer.valueOf(prefs.getString("pref_font", getString(R.string.pref_default_font)));
-      if (n != prefsFont) {
-        prefsFont = n;
+      i = Integer.valueOf(prefs.getString("pref_font", getString(R.string.pref_default_font)));
+      if (i != prefsFont) {
+        prefsFont = i;
         needsResizing = true;
       }
     } catch (NumberFormatException e) {
@@ -434,23 +449,20 @@ public class DeskClock extends FragmentActivity implements
       }
     }
 
-    boolean ss = prefs.getBoolean("pref_screensaver", false);
-    if (ss != prefsScreenSaver) {
-      prefsScreenSaver = ss;
+    b = prefs.getBoolean("pref_screensaver", false);
+    if (b != prefsScreenSaver) {
+      prefsScreenSaver = b;
       display.setScreenSaver(prefsScreenSaver);
       needsResizing = true;
     }
 
-    int sc = prefs.getInt("pref_scale", 100);
-    if (sc != prefsScale) {
-      prefsScale = prefs.getInt("pref_scale", 100);
+    i = prefs.getInt("pref_scale", 100);
+    if (i != prefsScale) {
+      prefsScale = i;
       needsResizing = true;
     }
     
-    
     prefsUndockExit = prefs.getBoolean("pref_undock_exit", false);
-    //in case anyone has this preference still
-    prefsUndockExit = prefs.getBoolean("pref_ignore_undock", true);
 
   }
 
@@ -567,7 +579,7 @@ public class DeskClock extends FragmentActivity implements
   }
 
   private void resizeClock() {
-
+    Log.d(LOG_TAG, "resizeClock() called");
     // determine largest digit
     char bdigit = digitcharset[0];
     Rect bb = getBoundingBox(String.valueOf(bdigit), fonts[prefsFont], 10);
@@ -618,7 +630,6 @@ public class DeskClock extends FragmentActivity implements
     display.setSize(fontSize);
 
     needsResizing = false;
-    updateTime();
   }
 
   private void updateTime() {
@@ -726,7 +737,10 @@ public class DeskClock extends FragmentActivity implements
 
     public void tick() {
       this.removeMessages(0);
-      sendMessageDelayed(obtainMessage(0), 250);
+      if(prefsShowSeconds || prefsBlinkColon) {
+        // Send Message at next time update
+        sendMessageDelayed(obtainMessage(0), 1000);
+      }
     }
   }
 
