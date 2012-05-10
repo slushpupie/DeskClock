@@ -54,6 +54,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -229,6 +230,7 @@ public class DeskClock extends FragmentActivity implements
 
     isRunning = true;
     updateTime();
+    Toast.makeText(getApplicationContext(), R.string.startup_toast, Toast.LENGTH_SHORT).show();
   }
 
   /** Called when the activity is no longer visible. */
