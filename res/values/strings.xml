@@ -20,6 +20,7 @@ limitations under the License.
     <string name="changeLogTitle">Recent Changes</string>
     <string name="changeLog">* New fonts\n* Work around for for some random closes in preferences\n* Donate version <a href="http://market.android.com/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
+    <string name="startup_toast">Long press the screen for menu</string>
     
     <string name="settings_bg_color_confirm">Confirm</string>
     <string name="settings_default_color_confirm">Default Color</string>
