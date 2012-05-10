@@ -111,16 +111,15 @@ public class DeskClock extends FragmentActivity implements
   private String lastChangelog = "";
   private int prefsScale = 100;
   private boolean prefsUndockExit = false;
-  
+
   public void acknoledgeChangelog() {
-    SharedPreferences prefs = PreferenceManager
-        .getDefaultSharedPreferences(this);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     SharedPreferences.Editor editor = prefs.edit();
     editor.putBoolean("pref_changelog", false);
     editor.putString("last_changelog", getString(R.string.app_version));
     editor.commit();
   }
-  
+
   public DeskClock() {
     super();
     // determine if multitouch is really supported
@@ -142,7 +141,7 @@ public class DeskClock extends FragmentActivity implements
           switch (dockState) {
             case Intent.EXTRA_DOCK_STATE_UNDOCKED:
               Log.d(LOG_TAG, "received EXTRA_DOCK_STATE_UNDOCKED");
-              if(prefsUndockExit)
+              if (prefsUndockExit)
                 finish();
               else
                 Log.d(LOG_TAG, "Ignoring...");
@@ -180,8 +179,6 @@ public class DeskClock extends FragmentActivity implements
       }
     });
     display.setOnTouchListener(this);
-    
-    
 
     fonts = new Typeface[17];
     fonts[0] = Typeface.DEFAULT_BOLD;
@@ -205,7 +202,6 @@ public class DeskClock extends FragmentActivity implements
     loadPrefs();
 
     if (lastChangelog == null || !lastChangelog.equals(getString(R.string.app_version))) {
-      //showDialog(DIALOG_CHANGELOG);
       DialogFragment df = ChangelogDialog.newInstance();
       df.show(getSupportFragmentManager(), "dialog");
     }
@@ -264,7 +260,6 @@ public class DeskClock extends FragmentActivity implements
       startActivityForResult(intent, 0);
     }
     if (menuItem.getItemId() == R.id.menu_changelog) {
-      //showDialog(DIALOG_CHANGELOG);
       DialogFragment df = ChangelogDialog.newInstance();
       df.show(getSupportFragmentManager(), "dialog");
     }
@@ -461,7 +456,7 @@ public class DeskClock extends FragmentActivity implements
       prefsScale = i;
       needsResizing = true;
     }
-    
+
     prefsUndockExit = prefs.getBoolean("pref_undock_exit", false);
 
   }
@@ -569,7 +564,7 @@ public class DeskClock extends FragmentActivity implements
     display.setBackgroundColor(prefsBackgroundColor);
     display.setColor(prefsFontColor);
     display.setScreenSaver(prefsScreenSaver);
-    
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       display.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
@@ -737,7 +732,7 @@ public class DeskClock extends FragmentActivity implements
 
     public void tick() {
       this.removeMessages(0);
-      if(prefsShowSeconds || prefsBlinkColon) {
+      if (prefsShowSeconds || prefsBlinkColon) {
         // Send Message at next time update
         sendMessageDelayed(obtainMessage(0), 1000);
       }
