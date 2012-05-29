@@ -43,6 +43,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -170,15 +171,7 @@ public class DeskClock extends FragmentActivity implements
 
     layout = (LinearLayout) findViewById(R.id.layout);
     display = (DisplayView) findViewById(R.id.display);
-    display.setOnLongClickListener(new View.OnLongClickListener() {
-      public boolean onLongClick(View v) {
-        if (v.equals(display)) {
-          openOptionsMenu();
-          return true;
-        }
-        return false;
-      }
-    });
+    registerForContextMenu(display);
     display.setOnTouchListener(this);
 
     fonts = new Typeface[17];
@@ -267,6 +260,16 @@ public class DeskClock extends FragmentActivity implements
     }
     return true;
 
+  }
+
+  @Override
+  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    getMenuInflater().inflate(R.menu.main_menu, menu);
+  }
+
+  @Override
+  public boolean onContextItemSelected(MenuItem menuItem) {
+    return onOptionsItemSelected(menuItem);
   }
 
   /** Called when a shared preference is changed, added, or removed */
