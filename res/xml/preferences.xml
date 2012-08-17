@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.slushpupie.com/deskclock"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:title="@string/pref_title"
 	android:key="preferences"
 	android:summary="@string/pref_summary"
@@ -36,32 +36,35 @@ limitations under the License.
       android:summary="@string/pref_summary_undock_exit"
       android:defaultValue="@string/pref_default_undock_exit" />
      
-    <com.slushpupie.deskclock.SeekBarPreference
+    <com.slushpupie.widget.SeekBarPreference
       android:key="pref_screen_brightness"
       android:title="@string/pref_title_screen_brightness"
       android:summary="@string/pref_summary_screen_brightness"
       android:dialogMessage="@string/pref_dialog_message_screen_brightness"
       android:text="@string/pref_text_screen_brightness"
       android:defaultValue="50"
-      android:max="100" />
+      app:min="1"
+      app:max="100" />
 
-    <com.slushpupie.deskclock.SeekBarPreference
+    <com.slushpupie.widget.SeekBarPreference
       android:key="pref_screen_tmp_brightness"
       android:title="@string/pref_title_screen_tmp_brightness"
       android:summary="@string/pref_summary_screen_tmp_brightness"
       android:dialogMessage="@string/pref_dialog_message_screen_tmp_brightness"
       android:text="@string/pref_text_screen_tmp_brightness"
       android:defaultValue="70"
-      android:max="100" />
+      app:min="1"
+      app:max="100" />
 
-    <com.slushpupie.deskclock.SeekBarPreference
+    <com.slushpupie.widget.SeekBarPreference
       android:key="pref_button_brightness"
       android:title="@string/pref_title_button_brightness"
       android:summary="@string/pref_summary_button_brightness"
       android:dialogMessage="@string/pref_dialog_message_button_brightness"
       android:text="@string/pref_text_button_brightness"
       android:defaultValue="50"
-      android:max="100" />
+      app:min="0"
+      app:max="100" />
 
     <ListPreference
       android:key="pref_screen_orientation"
@@ -101,14 +104,15 @@ limitations under the License.
       android:summary="@string/pref_summary_screensaver"
       android:defaultValue="@string/pref_default_screensaver" />
 
-    <com.slushpupie.deskclock.SeekBarPreference
+    <com.slushpupie.widget.SeekBarPreference
       android:key="pref_screensaver_speed"
       android:title="@string/pref_title_screensaver_speed"
       android:summary="@string/pref_summary_screensaver_speed"
       android:dialogMessage="@string/pref_dialog_message_screensaver_speed"
       android:text="@string/pref_text_screensaver_speed"
       android:defaultValue="500"
-      android:max="10000" />
+      app:min="500"
+      app:max="10000" />
 
     <CheckBoxPreference
       android:key="pref_blink_seconds"
@@ -134,14 +138,15 @@ limitations under the License.
       android:entryValues="@array/pref_values_font" 
       android:entries="@array/pref_options_font"/>
     
-    <com.slushpupie.deskclock.SeekBarPreference
+    <com.slushpupie.widget.SeekBarPreference
       android:key="pref_scale"
       android:title="@string/pref_title_scale"
       android:summary="@string/pref_summary_scale"
       android:dialogMessage="@string/pref_dialog_message_scale"
       android:text="@string/pref_text_scale"
       android:defaultValue="100"
-      android:max="100" />
+      app:min="1"
+      app:max="100" />
       
     <CheckBoxPreference
       android:key="pref_hints"

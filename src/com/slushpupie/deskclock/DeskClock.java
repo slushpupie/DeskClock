@@ -403,7 +403,6 @@ public class DeskClock extends FragmentActivity implements
   /* Private methods */
 
   private void loadPrefs() {
-    Log.d(LOG_TAG, "loading preferences");
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     boolean b = false;
     int i = 0;
@@ -470,7 +469,8 @@ public class DeskClock extends FragmentActivity implements
     } catch (NumberFormatException e) {
       prefsBackgroundColor = Color.BLACK;
     }
-    layout.setBackgroundColor(prefsBackgroundColor);
+    //layout.setBackgroundColor(prefsBackgroundColor);
+    display.setBackgroundColor(prefsBackgroundColor);
 
     b = prefs.getBoolean("pref_show_seconds", false);
     if (b != prefsShowSeconds) {

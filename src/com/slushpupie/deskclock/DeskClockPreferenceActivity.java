@@ -27,6 +27,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 
+import com.slushpupie.widget.SeekBarPreference;
+import com.slushpupie.widget.ColorPickerDialog;
+
 public class DeskClockPreferenceActivity extends PreferenceActivity implements
     OnSharedPreferenceChangeListener {
 
