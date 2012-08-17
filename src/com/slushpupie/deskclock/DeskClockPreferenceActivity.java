@@ -32,6 +32,7 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
 
   ListPreference mKeepScreenOn;
   SeekBarPreference mScreenBrightness;
+  SeekBarPreference mTempScreenBrightness;
   SeekBarPreference mButtonBrightness;
   CheckBoxPreference mLeadingZero;
   ListPreference mScreenOrientation;
@@ -48,6 +49,7 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
 
     mKeepScreenOn = (ListPreference) findPreference("pref_keep_screen_on");
     mScreenBrightness = (SeekBarPreference) findPreference("pref_screen_brightness");
+    mTempScreenBrightness = (SeekBarPreference) findPreference("pref_screen_tmp_brightness");
     mButtonBrightness = (SeekBarPreference) findPreference("pref_button_brightness");
     mLeadingZero = (CheckBoxPreference) findPreference("pref_leading_zero");
     mScreenOrientation = (ListPreference) findPreference("pref_screen_orientation");
@@ -96,6 +98,9 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
       mScreenBrightness.setEnabled(true);
       mScreenBrightness.setSummary(getString(R.string.pref_summary_en_screen_brightness) + " "
           + mScreenBrightness.getProgress() + "%");
+      mTempScreenBrightness.setEnabled(true);
+      mTempScreenBrightness.setSummary(getString(R.string.pref_summary_en_screen_tmp_brightness)
+          + " " + mTempScreenBrightness.getProgress() + "%");
       if (showButtonBrightness) {
         mButtonBrightness.setEnabled(true);
         mButtonBrightness.setSummary(getString(R.string.pref_summary_en_button_brightness) + " "
@@ -105,6 +110,7 @@ public class DeskClockPreferenceActivity extends PreferenceActivity implements
       }
     } else {
       mScreenBrightness.setEnabled(false);
+      mTempScreenBrightness.setEnabled(false);
       mButtonBrightness.setEnabled(false);
     }
 

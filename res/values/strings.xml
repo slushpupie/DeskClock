@@ -18,7 +18,7 @@ limitations under the License.
     <string name="app_name">Desk Clock</string>
     <string name="app_version">1.8</string>
     <string name="changeLogTitle">Recent Changes</string>
-    <string name="changeLog">* Smooth Screensaver Mode\n* Donate version <a href="http://play.google.com/store/apps/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
+    <string name="changeLog">* Smooth Screensaver Mode\n* Tap Screen for temporary brightness\n* Donate version <a href="http://play.google.com/store/apps/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
     <string name="startup_toast">Long press the screen for menu</string>
     
@@ -51,7 +51,15 @@ limitations under the License.
     <string name="pref_dialog_message_screen_brightness">Screen Brightness</string>
     <string name="pref_text_screen_brightness">&#37;</string>
     <string name="pref_default_screen_brightness">50</string>
-    
+
+    <string name="pref_screen_tmp_brightness">Tap Screen Brightness</string>
+    <string name="pref_summary_screen_tmp_brightness">Brightness of screen when tapped</string>
+    <string name="pref_summary_en_screen_tmp_brightness">Set to </string>
+    <string name="pref_title_screen_tmp_brightness">Tap Screen Brightness</string>
+    <string name="pref_dialog_message_screen_tmp_brightness">Tap Screen Brightness</string>
+    <string name="pref_text_screen_tmp_brightness">&#37;</string>
+    <string name="pref_default_screen_tmp_brightness">70</string>
+
     <string name="pref_button_brightness">Button Brightness</string>
     <string name="pref_summary_button_brightness">Manually set the button brightness</string>
     <string name="pref_summary_en_button_brightness">Set to </string>

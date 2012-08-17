@@ -47,6 +47,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
@@ -62,7 +63,7 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 
 public class DeskClock extends FragmentActivity implements
-    SharedPreferences.OnSharedPreferenceChangeListener, OnTouchListener {
+    SharedPreferences.OnSharedPreferenceChangeListener, OnTouchListener, OnClickListener {
 
   private static final String LOG_TAG = "DeskClock";
   private static char digitcharset[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
@@ -98,6 +99,12 @@ public class DeskClock extends FragmentActivity implements
     }
   };
 
+  private final Runnable runSetBrightness = new Runnable() {
+    public void run() {
+      setScreenLock(prefsKeepSreenOn, prefsScreenBrightness, prefsButtonBrightness);
+    }
+  };
+
   // current state
   // private TextView display;
   private DisplayView display;
@@ -108,6 +115,7 @@ public class DeskClock extends FragmentActivity implements
 
   // backed by preferences
   private int prefsKeepSreenOn = 0;
+  private int prefsTempScreenBrightness = 70;
   private int prefsScreenBrightness = 50;
   private int prefsButtonBrightness = 50;
   private boolean prefsLeadingZero = false;
@@ -185,6 +193,7 @@ public class DeskClock extends FragmentActivity implements
     display = (DisplayView) findViewById(R.id.display);
     registerForContextMenu(display);
     display.setOnTouchListener(this);
+    display.setOnClickListener(this);
 
     fonts = new Typeface[17];
     fonts[0] = Typeface.DEFAULT_BOLD;
@@ -244,6 +253,7 @@ public class DeskClock extends FragmentActivity implements
     isRunning = false;
     handler.removeCallbacks(runMoveDisplay);
     handler.removeCallbacks(runUpdateTime);
+    handler.removeCallbacks(runSetBrightness);
     super.onStop();
   }
 
@@ -339,6 +349,23 @@ public class DeskClock extends FragmentActivity implements
     }
   }
 
+  @Override
+  public void onClick(View v) {
+    handler.removeCallbacks(runSetBrightness);
+
+    Window window = getWindow();
+
+    LayoutParams layoutParams = window.getAttributes();
+    // Setting to 0 turns the screen off, so dont allow that
+    if (prefsTempScreenBrightness <= 100 && prefsTempScreenBrightness > 0)
+      layoutParams.screenBrightness = (prefsTempScreenBrightness / 100.0f);
+    if (prefsTempScreenBrightness < 1)
+      layoutParams.screenBrightness = 0.01f;
+    window.setAttributes(layoutParams);
+
+    handler.postDelayed(runSetBrightness, 5000);
+  }
+
   protected Dialog onCreateDialog(int id) {
     switch (id) {
       case DIALOG_CHANGELOG:
@@ -398,6 +425,7 @@ public class DeskClock extends FragmentActivity implements
       prefsKeepSreenOn = 0;
 
     prefsScreenBrightness = prefs.getInt("pref_screen_brightness", 50);
+    prefsTempScreenBrightness = prefs.getInt("pref_screen_temp_brightness", 70);
     prefsButtonBrightness = prefs.getInt("pref_button_brightness", 50);
 
     setScreenLock(prefsKeepSreenOn, prefsScreenBrightness, prefsButtonBrightness);

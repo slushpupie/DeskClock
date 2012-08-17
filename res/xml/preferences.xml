@@ -46,6 +46,15 @@ limitations under the License.
       android:max="100" />
 
     <com.slushpupie.deskclock.SeekBarPreference
+      android:key="pref_screen_tmp_brightness"
+      android:title="@string/pref_title_screen_tmp_brightness"
+      android:summary="@string/pref_summary_screen_tmp_brightness"
+      android:dialogMessage="@string/pref_dialog_message_screen_tmp_brightness"
+      android:text="@string/pref_text_screen_tmp_brightness"
+      android:defaultValue="70"
+      android:max="100" />
+
+    <com.slushpupie.deskclock.SeekBarPreference
       android:key="pref_button_brightness"
       android:title="@string/pref_title_button_brightness"
       android:summary="@string/pref_summary_button_brightness"
