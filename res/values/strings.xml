@@ -18,7 +18,7 @@ limitations under the License.
     <string name="app_name">Desk Clock</string>
     <string name="app_version">1.8</string>
     <string name="changeLogTitle">Recent Changes</string>
-    <string name="changeLog">* Improved support for Android 4.0\n* Handle "undock" events better\n* CPU improvements\n* Donate version <a href="http://market.android.com/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
+    <string name="changeLog">* Smooth Screensaver Mode\n* Donate version <a href="http://play.google.com/store/apps/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
     <string name="startup_toast">Long press the screen for menu</string>
     
@@ -154,7 +154,10 @@ limitations under the License.
 
     <string name="pref_title_changelog">Show Changelog</string>
     <string name="pref_summary_changelog">Display Changelog at next startup</string>
-    
+
+    <string name="pref_title_hints">Show popup hints</string>
+    <string name="pref_summary_hints">Display popup hints at start</string>
+
     <string name="pref_title_scale">Scale Font</string>
     <string name="pref_summary_scale">Scaled to</string>
     <string name="pref_dialog_message_scale">Scale down the font</string>

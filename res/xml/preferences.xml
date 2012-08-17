@@ -135,6 +135,12 @@ limitations under the License.
       android:max="100" />
       
     <CheckBoxPreference
+      android:key="pref_hints"
+      android:title="@string/pref_title_hints"
+      android:defaultValue="true"
+      android:summary="@string/pref_summary_hints" />
+
+    <CheckBoxPreference
       android:key="pref_changelog"
       android:title="@string/pref_title_changelog"
       android:summary="@string/pref_summary_changelog" />

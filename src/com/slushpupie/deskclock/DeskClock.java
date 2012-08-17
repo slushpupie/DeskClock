@@ -122,6 +122,7 @@ public class DeskClock extends FragmentActivity implements
   private boolean prefsScreenSaver = false;
   private long prefsScreenSaverSpeed = 500;
   private String lastChangelog = "";
+  private boolean prefsShowHints = true;
   private int prefsScale = 100;
   private boolean prefsUndockExit = false;
 
@@ -231,7 +232,8 @@ public class DeskClock extends FragmentActivity implements
     isRunning = true;
     updateTime();
     handler.postDelayed(runMoveDisplay, prefsScreenSaverSpeed);
-    Toast.makeText(getApplicationContext(), R.string.startup_toast, Toast.LENGTH_SHORT).show();
+    if (prefsShowHints)
+      Toast.makeText(getApplicationContext(), R.string.startup_toast, Toast.LENGTH_SHORT).show();
   }
 
   /** Called when the activity is no longer visible. */
@@ -482,6 +484,8 @@ public class DeskClock extends FragmentActivity implements
       prefsScale = i;
       needsResizing = true;
     }
+
+    prefsShowHints = prefs.getBoolean("pref_hints", true);
 
     prefsUndockExit = prefs.getBoolean("pref_undock_exit", false);
 
