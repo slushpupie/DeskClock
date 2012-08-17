@@ -147,6 +147,11 @@ limitations under the License.
     <string name="pref_summary_screensaver">Periodically move clock around the screen</string>
     <string name="pref_default_screensaver">0</string>
     
+    <string name="pref_title_screensaver_speed">Screensaver Delay</string>
+    <string name="pref_summary_screensaver_speed">Milliseconds between moves</string>
+    <string name="pref_dialog_message_screensaver_speed">Millisecond delay</string>
+    <string name="pref_text_screensaver_speed">ms</string>
+
     <string name="pref_title_changelog">Show Changelog</string>
     <string name="pref_summary_changelog">Display Changelog at next startup</string>
     

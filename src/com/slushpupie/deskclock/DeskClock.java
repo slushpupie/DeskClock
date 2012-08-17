@@ -34,7 +34,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -85,8 +84,19 @@ public class DeskClock extends FragmentActivity implements
   private Typeface[] fonts;
 
   private boolean isRunning = false;
-  private RefreshHandler handler = new RefreshHandler();
+  private Handler handler = new Handler();
   private final BroadcastReceiver intentReceiver;
+
+  private final Runnable runUpdateTime = new Runnable() {
+    public void run() {
+      updateTime();
+    }
+  };
+  private final Runnable runMoveDisplay = new Runnable() {
+    public void run() {
+      moveClock();
+    }
+  };
 
   // current state
   // private TextView display;
@@ -110,6 +120,7 @@ public class DeskClock extends FragmentActivity implements
   private int prefsFont = 0;
   private int prefsScreenOrientation = -1;
   private boolean prefsScreenSaver = false;
+  private long prefsScreenSaverSpeed = 500;
   private String lastChangelog = "";
   private int prefsScale = 100;
   private boolean prefsUndockExit = false;
@@ -219,6 +230,7 @@ public class DeskClock extends FragmentActivity implements
 
     isRunning = true;
     updateTime();
+    handler.postDelayed(runMoveDisplay, prefsScreenSaverSpeed);
     Toast.makeText(getApplicationContext(), R.string.startup_toast, Toast.LENGTH_SHORT).show();
   }
 
@@ -228,6 +240,8 @@ public class DeskClock extends FragmentActivity implements
     setScreenLock(0, 0, 0);
     unregisterReceiver(intentReceiver);
     isRunning = false;
+    handler.removeCallbacks(runMoveDisplay);
+    handler.removeCallbacks(runUpdateTime);
     super.onStop();
   }
 
@@ -449,10 +463,17 @@ public class DeskClock extends FragmentActivity implements
       }
     }
 
+    prefsScreenSaverSpeed = prefs.getInt("pref_screensaver_speed", 500);
+    if (prefsScreenSaverSpeed < 500)
+      prefsScreenSaverSpeed = 500;
+    if (prefsScreenSaverSpeed > 10000)
+      prefsScreenSaverSpeed = 10000;
     b = prefs.getBoolean("pref_screensaver", false);
     if (b != prefsScreenSaver) {
       prefsScreenSaver = b;
       display.setScreenSaver(prefsScreenSaver);
+      handler.removeCallbacks(runMoveDisplay);
+      handler.postDelayed(runMoveDisplay, prefsScreenSaverSpeed);
       needsResizing = true;
     }
 
@@ -628,14 +649,19 @@ public class DeskClock extends FragmentActivity implements
     display.setFont(fonts[prefsFont]);
     display.setPadding(leftPadding, 0, 0, 0);
     display.setSize(fontSize);
-
     needsResizing = false;
+    display.setTime("");
+  }
+
+  private void moveClock() {
+    display.move();
+    handler.removeCallbacks(runMoveDisplay);
+    handler.postDelayed(runMoveDisplay, prefsScreenSaverSpeed);
   }
 
   private void updateTime() {
     if (needsResizing) {
       resizeClock();
-      return;
     }
 
     Calendar cal = Calendar.getInstance();
@@ -668,9 +694,11 @@ public class DeskClock extends FragmentActivity implements
 
     display.setTime(DateFormat.format(format.toString(), cal));
     // layout.postInvalidate();
-    if (isRunning)
-      handler.tick();
 
+    if (isRunning && (prefsShowSeconds || prefsBlinkColon)) {
+      handler.removeCallbacks(runUpdateTime);
+      handler.postDelayed(runUpdateTime, 1000);
+    }
   }
 
   private float fitTextToRect(Typeface font, String text, Rect fitRect) {
@@ -726,22 +754,6 @@ public class DeskClock extends FragmentActivity implements
       width += w;
     r.right = (int) width;
     return r;
-  }
-
-  private class RefreshHandler extends Handler {
-
-    public void handleMessage(Message message) {
-      updateTime();
-
-    }
-
-    public void tick() {
-      this.removeMessages(0);
-      if (prefsShowSeconds || prefsBlinkColon) {
-        // Send Message at next time update
-        sendMessageDelayed(obtainMessage(0), 1000);
-      }
-    }
   }
 
   private float spacing(MotionEvent event) {

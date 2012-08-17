@@ -92,6 +92,15 @@ limitations under the License.
       android:summary="@string/pref_summary_screensaver"
       android:defaultValue="@string/pref_default_screensaver" />
 
+    <com.slushpupie.deskclock.SeekBarPreference
+      android:key="pref_screensaver_speed"
+      android:title="@string/pref_title_screensaver_speed"
+      android:summary="@string/pref_summary_screensaver_speed"
+      android:dialogMessage="@string/pref_dialog_message_screensaver_speed"
+      android:text="@string/pref_text_screensaver_speed"
+      android:defaultValue="500"
+      android:max="10000" />
+
     <CheckBoxPreference
       android:key="pref_blink_seconds"
       android:title="@string/pref_title_blink_seconds" 
