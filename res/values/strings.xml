@@ -16,9 +16,9 @@ limitations under the License.
 -->
 <resources>
     <string name="app_name">Desk Clock</string>
-    <string name="app_version">1.8</string>
+    <string name="app_version">1.9</string>
     <string name="changeLogTitle">Recent Changes</string>
-    <string name="changeLog">* Smooth Screensaver Mode\n* Tap Screen for temporary brightness\n* Donate version <a href="http://play.google.com/store/apps/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
+    <string name="changeLog">* Smooth Screensaver Mode\n* Tap Screen for temporary brightness\n* New settings\n* Donate version <a href="http://play.google.com/store/apps/details?id=com.slushpupie.deskclock.donate">available</a> in Market</string>
     <string name="ok">OK</string>
     <string name="startup_toast">Long press the screen for menu</string>
     
