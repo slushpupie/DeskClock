@@ -1,4 +1,4 @@
 build:
-  image: beevelop/android:latest
+  image: gfx2015/android:latest
   commands:
-    - ant build
+    - ant release
