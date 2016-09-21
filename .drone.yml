@@ -1,4 +1,4 @@
 build:
-  image: gfx2015/android:latest
+  image: slushpupie/android-build:latest
   commands:
     - ant release
