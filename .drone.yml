@@ -1,0 +1,4 @@
+build:
+  image: beevelop/android:latest
+  commands:
+    - ant build
