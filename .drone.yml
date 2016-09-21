@@ -1,0 +1,4 @@
+build:
+  image: slushpupie/android-build:latest
+  commands:
+    - ant release
